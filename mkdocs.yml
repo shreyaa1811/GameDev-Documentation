@@ -42,6 +42,8 @@ markdown_extensions:
   - codehilite
   - footnotes
   - meta
+  - pymdownx.highlight
+  - pymdownx.superfences  
   - toc:
       permalink: true
 
