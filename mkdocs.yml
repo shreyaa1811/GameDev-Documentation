@@ -19,7 +19,7 @@ theme:
   palette:
     - scheme: default
       primary: indigo
-      accent: pink
+      accent: pink 
       toggle:
         icon: material/weather-night
         name: Switch to dark mode
