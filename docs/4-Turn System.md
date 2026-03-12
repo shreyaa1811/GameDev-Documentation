@@ -14,10 +14,12 @@
 
 ```csharp
 using UnityEngine;
+
 public class TurnManager
 {
-
+    
 }
+
 ```
 
 Because this is not a MonoBehaviour script and doesn’t exist in the scene, there is no **Start** or **Update** method, so you'll need to create/initialize it manually, like you would when you initialize a Vector3 or your CellData.
@@ -64,57 +66,73 @@ You should be able to do it all by yourself, and here is what the final scripts 
 ### **BoardManager**
 
 ```csharp
-public class BoardManager:MonoBehaviour
+using UnityEngine;
+using UnityEngine.Tilemaps;
+
+public class BoardManager : MonoBehaviour
 {
-public class CellData
-{
-public bool Passable;
+    public class CellData
+    {
+        public bool Passable;
+    }
+
+    private CellData[,] m_BoardData;
+    private Tilemap m_Tilemap;
+    private Grid m_Grid;
+
+    public int Width;
+    public int Height;
+
+    public Tile[] GroundTiles;
+    public Tile[] WallTiles;
+
+    public void Init()
+    {
+        m_Tilemap = GetComponentInChildren<Tilemap>();
+        m_Grid = GetComponentInChildren<Grid>();
+
+        m_BoardData = new CellData[Width, Height];
+
+        for (int y = 0; y < Height; ++y)
+        {
+            for (int x = 0; x < Width; ++x)
+            {
+                Tile tile;
+                m_BoardData[x, y] = new CellData();
+
+                if (x == 0 || y == 0 || x == Width - 1 || y == Height - 1)
+                {
+                    tile = WallTiles[Random.Range(0, WallTiles.Length)];
+                    m_BoardData[x, y].Passable = false;
+                }
+                else
+                {
+                    tile = GroundTiles[Random.Range(0, GroundTiles.Length)];
+                    m_BoardData[x, y].Passable = true;
+                }
+
+                m_Tilemap.SetTile(new Vector3Int(x, y, 0), tile);
+            }
+        }
+    }
+
+    public Vector3 CellToWorld(Vector2Int cellIndex)
+    {
+        return m_Grid.GetCellCenterWorld((Vector3Int)cellIndex);
+    }
+
+    public CellData GetCellData(Vector2Int cellIndex)
+    {
+        if (cellIndex.x < 0 || cellIndex.x >= Width ||
+            cellIndex.y < 0 || cellIndex.y >= Height)
+        {
+            return null;
+        }
+
+        return m_BoardData[cellIndex.x, cellIndex.y];
+    }
 }
-private CellData[,] m_BoardData;
-private Tilemap m_Tilemap;
-private Grid m_Grid;
-public int Width;
-public int Height;
-public Tile[] GroundTiles;
-public Tile[] WallTiles;
-public void Init()
-{       
-m_Tilemap=GetComponentInChildren<Tilemap>();       
-m_Grid=GetComponentInChildren<Grid>();
-       m_BoardData=newCellData[Width, Height];
-for(int y=0; y< Height;++y)
-{
-for(int x=0; x< Width;++x)
-{
-Tile tile;               
-m_BoardData[x, y]=newCellData();
-if(x==0|| y==0|| x== Width-1|| y== Height-1)
-{
-tile= WallTiles[Random.Range(0, WallTiles.Length)];                   
-m_BoardData[x, y].Passable=false;
-}
-else                  
-{
-tile= GroundTiles[Random.Range(0, GroundTiles.Length)];                   
-m_BoardData[x, y].Passable=true;
-}
-m_Tilemap.SetTile(newVector3Int(x, y,0), tile);
-}
-}
-}
-public Vector3CellToWorld(Vector2Int cellIndex)
-{
-return m_Grid.GetCellCenterWorld((Vector3Int)cellIndex);
-}
-public CellData GetCellData(Vector2Int cellIndex)
-{
-if(cellIndex.x<0|| cellIndex.x>= Width|| cellIndex.y<0|| cellIndex.y>= Height)
-{
-return null;
-}
-return m_BoardData[cellIndex.x, cellIndex.y];
-}
-}
+
 ```
 
 ### GameManager
@@ -140,19 +158,26 @@ private TurnManager m_TurnManager;
 - To do this, you’ll need a private member variable that saves the current turn number, initialized at 1 in the constructor, and a **Tick** method that increases the count by 1 and writes the current turn count using the **Debug.Log** method, like the following:
 
 ```csharp
-public class TurnManager
+using UnityEngine;
+
+public class GameManager : MonoBehaviour
 {
-privateint m_TurnCount;
-publicTurnManager()
-{       
-m_TurnCount=1;
+    public BoardManager BoardManager;
+    public PlayerController PlayerController;
+
+    private TurnManager m_TurnManager;
+
+    // Start is called once before the first execution of Update
+    void Start()
+    {
+        m_TurnManager = new TurnManager();
+
+        BoardManager.Init();
+
+        PlayerController.Spawn(BoardManager, new Vector2Int(1, 1));
+    }
 }
-public void Tick()
-{       
-m_TurnCount+=1;       
-Debug.Log("Current turn count : "+ m_TurnCount);
-}
-}
+
 ```
 
 - Then you’ll need to call **Tick** every time the player moves. But how to do this? The only place that has a reference to the **TurnManager** is inside the **GameManager**.
@@ -163,33 +188,38 @@ Debug.Log("Current turn count : "+ m_TurnCount);
 This is our new singleton **GameManager**:
 
 ```csharp
-public class GameManager:MonoBehaviour
+using UnityEngine;
+
+public class GameManager : MonoBehaviour
 {
-public static GameManager Instance
-{
-get
-;
-private set;
+    public static GameManager Instance { get; private set; }
+
+    public BoardManager BoardManager;
+    public PlayerController PlayerController;
+
+    private TurnManager m_TurnManager;
+
+    private void Awake()
+    {
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+    }
+
+    private void Start()
+    {
+        m_TurnManager = new TurnManager();
+
+        BoardManager.Init();
+
+        PlayerController.Spawn(BoardManager, new Vector2Int(1, 1));
+    }
 }
-public BoardManager BoardManager;
-public PlayerController PlayerController;
-private TurnManager m_TurnManager;
-private void Awake()
-{
-if(Instance!=null)
-{
-Destroy(gameObject);
-return;
-}
-       Instance=this;
-       }
-voidStart()
-{       
-m_TurnManager=newTurnManager();
-BoardManager.Init();       
-PlayerController.Spawn(BoardManager,newVector2Int(1,1));
-}
-}
+
 ```
 
 - There is a static **GameManager** property member called **Instance**. This will store a reference to your GameManager. There are two keywords: get and set. **set** is preceded by the **private** keyword. What this means is that accessing that member variable (get) is available for all parts of the code, but writing the value of that member variable (set) can only be done from inside the class.
@@ -203,50 +233,53 @@ PlayerController.Spawn(BoardManager,newVector2Int(1,1));
 - Now if you change the **TurnManager** variable of the **GameManager** to be **public**, other scripts will also be able to access it through **GameManager.Instance**. Define the **TurnManager** **set** property as **private** so only the **GameManager** script can change this variable, but leave the **get** property **public** so other scripts can access the **TurnManager**.
 
 ```csharp
-public class GameManager:MonoBehaviour
+using UnityEngine;
+
+public class GameManager : MonoBehaviour
 {
-public static GameManager Instance
-{
-get;
-private set;
+    public static GameManager Instance { get; private set; }
+
+    public BoardManager BoardManager;
+    public PlayerController PlayerController;
+
+    public TurnManager TurnManager { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+    }
+
+    private void Start()
+    {
+        TurnManager = new TurnManager();
+
+        BoardManager.Init();
+
+        PlayerController.Spawn(BoardManager, new Vector2Int(1, 1));
+    }
 }
-public BoardManager BoardManager;
-public PlayerController PlayerController;
-public TurnManager TurnManager
-{
-get;
-private set;
-}
-private voidAwake()
-{
-if(Instance!=null)
-{
-Destroy(gameObject);
-return;
-}
-       Instance=this;
-       }
-voidStart()
-{       
-TurnManager=newTurnManager();
-BoardManager.Init();       
-PlayerController.Spawn(BoardManager,newVector2Int(1,1));
-}
-}
+
 ```
 
 Then in the **Update** method of your **PlayerController**, you can “tick” the **TurnManager** just before calling **MoveTo**:
 
 ```csharp
-if(hasMoved)
+if (hasMoved)
 {
-//check if the new position is passable, then move there if it is.
-BoardManager.CellData cellData= m_Board.GetCellData(newCellTarget);
-if(cellData!=null&& cellData.Passable)
-{       
-GameManager.Instance.TurnManager.Tick();
-MoveTo(newCellTarget);
-}
+    // check if the new position is passable, then move there if it is.
+    BoardManager.CellData cellData = m_Board.GetCellData(newCellTarget);
+
+    if (cellData != null && cellData.Passable)
+    {
+        GameManager.Instance.TurnManager.Tick();
+        MoveTo(newCellTarget);
+    }
 }
 ```
 

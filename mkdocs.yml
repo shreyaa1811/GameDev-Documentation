@@ -2,6 +2,8 @@
 site_name: GAME DEV WORKSHOP DOCS
 nav:
   - Home: index.md
+  - Content: Content Page.md
+  - Unity installation: Unity Installation.md
   - Introduction: 1-Introduction.md
   - Creating the Game: 2-Creating the Game.md
   - Character Development: 3-Character Development.md
@@ -11,11 +13,14 @@ nav:
   - Beating the Game: 7-Beating the game.md
   - Animation: 8-Animation.md
   - Adding an Enemy: 9-Adding an enemy.md
-  - Conclusion: Conclusion.md
+  - Conclusion: 10-Conclusion.md
 theme:
   name: material
   logo: images/logo.png  # Place your logo in docs/images/
   favicon: images/favicon.ico  # Place your favicon in docs/images/
+  extra_css: 
+    - stylesheets/compact.css  # Custom CSS for compact design  
+  
   palette:
     - scheme: default
       primary: indigo
@@ -35,12 +40,12 @@ theme:
   features:
     - navigation.tabs
     - navigation.top
+    - navigation.footer
+    - navigation.sections
     - search.highlight
     - search.suggest
     - toc.integrate
   density: compact
-  extra_css:
-    - stylesheets/compact.css
 extra:
   social:
     - icon: fontawesome/brands/github

@@ -25,62 +25,80 @@ This outline should help you realize the following about what your code needs to
 - A public method called “Spawn” that saves the BoardManager that the player is placed in and the index where it is currently.
 
 ```csharp
-usingUnityEngine;
+using UnityEngine;
 
-public class PlayerController:MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
-private BoardManager m_Board; 
-private Grid m_Grid;
-private Vector2Int m_CellPosition;
-public Vector3 CellToWorld(Vector2Int cellIndex)
+    private BoardManager m_Board;
+    private Grid m_Grid;
+    private Vector2Int m_CellPosition;
+
+    public Vector3 CellToWorld(Vector2Int cellIndex)
     {
         return m_Grid.GetCellCenterWorld((Vector3Int)cellIndex);
     }
-public void Spawn(BoardManager boardManager,Vector2Int cell)
-{       
-m_Board= boardManager;       
-m_CellPosition= cell;
-public void Spawn(BoardManager boardManager, Vector2Int cell)
-{
-   m_Board = boardManager;
-   m_CellPosition = cell;
 
-   //let's move to the right position
-   transform.position = m_Board.CellToWorld(cell);
+    public void Spawn(BoardManager boardManager, Vector2Int cell)
+    {
+        m_Board = boardManager;
+        m_CellPosition = cell;
+
+        // Move to the correct world position
+        transform.position = m_Board.CellToWorld(cell);
+    }
 }
+
 ```
 
 1. Add the following code into your BoardManager Script:
 
 ```csharp
-public PlayerController Player;
-// Start is called before the first frame update 
-voidStart()
-{   
-m_Tilemap=GetComponentInChildren<Tilemap>();   
-m_Grid=GetComponentInChildren<Grid>();
-m_BoardData=newCellData[Width, Height];
-for(int y=0; y< Height;++y)
+using UnityEngine;
+using UnityEngine.Tilemaps;
+
+public class BoardManager : MonoBehaviour
 {
-for(int x=0; x< Width;++x)
-{
-Tile tile;           
-m_BoardData[x, y]=newCellData();
-if(x==0|| y==0|| x== Width-1|| y== Height-1)
-{               
-tile= WallTiles[Random.Range(0, WallTiles.Length)];               
-m_BoardData[x, y].Passable=false;
+    public PlayerController Player;
+
+    private Tilemap m_Tilemap;
+    private Grid m_Grid;
+
+    private CellData[,] m_BoardData;
+
+    void Start()
+    {
+        m_Tilemap = GetComponentInChildren<Tilemap>();
+        m_Grid = GetComponentInChildren<Grid>();
+
+        m_BoardData = new CellData[Width, Height];
+
+        for (int y = 0; y < Height; ++y)
+        {
+            for (int x = 0; x < Width; ++x)
+            {
+                Tile tile;
+                m_BoardData[x, y] = new CellData();
+
+                if (x == 0 || y == 0 || x == Width - 1 || y == Height - 1)
+                {
+                    tile = WallTiles[Random.Range(0, WallTiles.Length)];
+                    m_BoardData[x, y].Passable = false;
+                }
+                else
+                {
+                    tile = GroundTiles[Random.Range(0, GroundTiles.Length)];
+                    m_BoardData[x, y].Passable = true;
+                }
+
+                m_Tilemap.SetTile(new Vector3Int(x, y, 0), tile);
+            }
+        }
+
+        // Spawn the player at (1,1)
+        Player.Spawn(this, new Vector2Int(1, 1));
+    }
 }
-else
-{               
-tile= GroundTiles[Random.Range(0, GroundTiles.Length)];               
-m_BoardData[x, y].Passable=true;
-}
-m_Tilemap.SetTile(newVector3Int(x, y,0), tile);
-}
-}
-Player.Spawn(this,newVector2Int(1,1));
-}
+
 ```
 
 The above code does the following things:
@@ -118,44 +136,57 @@ The code below shows one possible way of doing this.
 ```csharp
 private void Update()
 {
-Vector2Int newCellTarget= m_CellPosition;
-bool hasMoved=false;
-if(Keyboard.current.upArrowKey.wasPressedThisFrame)
-{       
-newCellTarget.y+=1;       
-hasMoved=true;
+    Vector2Int newCellTarget = m_CellPosition;
+    bool hasMoved = false;
+
+    if (Keyboard.current.upArrowKey.wasPressedThisFrame)
+    {
+        newCellTarget.y += 1;
+        hasMoved = true;
+    }
+    else if (Keyboard.current.downArrowKey.wasPressedThisFrame)
+    {
+        newCellTarget.y -= 1;
+        hasMoved = true;
+    }
+    else if (Keyboard.current.rightArrowKey.wasPressedThisFrame)
+    {
+        newCellTarget.x += 1;
+        hasMoved = true;
+    }
+    else if (Keyboard.current.leftArrowKey.wasPressedThisFrame)
+    {
+        newCellTarget.x -= 1;
+        hasMoved = true;
+    }
+
+    if (hasMoved)
+    {
+        // Check if the new position is passable
+        if (m_Board.IsPassable(newCellTarget))
+        {
+            m_CellPosition = newCellTarget;
+            transform.position = m_Board.CellToWorld(m_CellPosition);
+        }
+    }
 }
-else if(Keyboard.current.downArrowKey.wasPressedThisFrame)
-{       
-newCellTarget.y-=1;       
-hasMoved=true;
-}
-else if(Keyboard.current.rightArrowKey.wasPressedThisFrame)
-{       
-newCellTarget.x+=1;       
-hasMoved=true;
-}
-else if(Keyboard.current.leftArrowKey.wasPressedThisFrame)
-{       
-newCellTarget.x-=1;       
-hasMoved=true;
-}
-if(hasMoved)
-{
-//check if the new position is passable, then move there if it is.}}
+
 ```
 
 Just like with the **BoardManager** GameObject, you have no way of getting the information about whether a cell is passable. As before, retrieving the cell data of a specific cell is something you'll need to do a lot, so add the following method for this to your **BoardManager** script:
 
 ```csharp
-public CellData GetCellData(Vector2Int cellIndex) 
+public CellData GetCellData(Vector2Int cellIndex)
 {
-if(cellIndex.x<0|| cellIndex.x>= Width|| cellIndex.y<0|| cellIndex.y>= Height)
-{
-return null;
+    if (cellIndex.x < 0 || cellIndex.x >= Width ||
+        cellIndex.y < 0 || cellIndex.y >= Height)
+    {
+        return null;
+    }
+
+    return m_BoardData[cellIndex.x, cellIndex.y];
 }
-return m_BoardData[cellIndex.x, cellIndex.y];
-}
+
 ```
 
 This method returns the information saved on the array **m_BoardData** of that cell. Restricting the search on the array to only the actual cells available in that level so you don’t generate an exception trying to index a cell that doesn’t exist. In that case, the method returns null.
@@ -165,39 +196,43 @@ You can now update your **Update** method in your **PlayerController** scrip
 ```csharp
 private void Update()
 {
-Vector2Int new CellTarget= m_CellPosition;
-bool hasMoved=false;
-if(Keyboard.current.upArrowKey.wasPressedThisFrame)
-{        
-newCellTarget.y+=1;        
-hasMoved=true;
+    Vector2Int newCellTarget = m_CellPosition;
+    bool hasMoved = false;
+
+    if (Keyboard.current.upArrowKey.wasPressedThisFrame)
+    {
+        newCellTarget.y += 1;
+        hasMoved = true;
+    }
+    else if (Keyboard.current.downArrowKey.wasPressedThisFrame)
+    {
+        newCellTarget.y -= 1;
+        hasMoved = true;
+    }
+    else if (Keyboard.current.rightArrowKey.wasPressedThisFrame)
+    {
+        newCellTarget.x += 1;
+        hasMoved = true;
+    }
+    else if (Keyboard.current.leftArrowKey.wasPressedThisFrame)
+    {
+        newCellTarget.x -= 1;
+        hasMoved = true;
+    }
+
+    if (hasMoved)
+    {
+        // Check if the new position is passable, then move there if it is.
+        BoardManager.CellData cellData = m_Board.GetCellData(newCellTarget);
+
+        if (cellData != null && cellData.Passable)
+        {
+            m_CellPosition = newCellTarget;
+            transform.position = m_Board.CellToWorld(m_CellPosition);
+        }
+    }
 }
-else if(Keyboard.current.downArrowKey.wasPressedThisFrame)
-{        
-newCellTarget.y-=1;        
-hasMoved=true;
-}
-else if(Keyboard.current.rightArrowKey.wasPressedThisFrame)
-{        
-newCellTarget.x+=1;        
-hasMoved=true;
-}
-else if(Keyboard.current.leftArrowKey.wasPressedThisFrame)
-{        
-newCellTarget.x-=1;        
-hasMoved=true;
-}
-if(hasMoved)
-{
-//check if the new position is passable, then move there if it 
-is.BoardManager.CellData cellData= m_Board.GetCellData(newCellTarget);
-if(cellData!=null&& cellData.Passable)
-{
-m_CellPosition= newCellTarget;            
-transform.position= m_Board.CellToWorld(m_CellPosition);
-}
-}
-}
+
 ```
 
 ## 3.3 Refactoring
@@ -211,51 +246,61 @@ transform.position= m_Board.CellToWorld(m_CellPosition);
 ```csharp
 using UnityEngine;
 using UnityEngine.InputSystem;
-public class PlayerController:MonoBehaviour
+
+public class PlayerController : MonoBehaviour
 {
-private BoardManager m_Board;
-private Vector2Int m_CellPosition;
-public void Spawn(BoardManager boardManager,Vector2Int cell)
-{       
-m_Board= boardManager;MoveTo(cell);
-}
-public void MoveTo(Vector2Int cell)
-{       
-m_CellPosition= cell;       
-transform.position= m_Board.CellToWorld(m_CellPosition);
+    private BoardManager m_Board;
+    private Vector2Int m_CellPosition;
+
+    public void Spawn(BoardManager boardManager, Vector2Int cell)
+    {
+        m_Board = boardManager;
+        MoveTo(cell);
+    }
+
+    public void MoveTo(Vector2Int cell)
+    {
+        m_CellPosition = cell;
+        transform.position = m_Board.CellToWorld(m_CellPosition);
+    }
+
+    private void Update()
+    {
+        Vector2Int newCellTarget = m_CellPosition;
+        bool hasMoved = false;
+
+        if (Keyboard.current.upArrowKey.wasPressedThisFrame)
+        {
+            newCellTarget.y += 1;
+            hasMoved = true;
+        }
+        else if (Keyboard.current.downArrowKey.wasPressedThisFrame)
+        {
+            newCellTarget.y -= 1;
+            hasMoved = true;
+        }
+        else if (Keyboard.current.rightArrowKey.wasPressedThisFrame)
+        {
+            newCellTarget.x += 1;
+            hasMoved = true;
+        }
+        else if (Keyboard.current.leftArrowKey.wasPressedThisFrame)
+        {
+            newCellTarget.x -= 1;
+            hasMoved = true;
+        }
+
+        if (hasMoved)
+        {
+            // Check if the new position is passable, then move there if it is.
+            BoardManager.CellData cellData = m_Board.GetCellData(newCellTarget);
+
+            if (cellData != null && cellData.Passable)
+            {
+                MoveTo(newCellTarget);
+            }
+        }
+    }
 }
 
-private voidUpdate()
-{
-Vector2Int newCellTarget= m_CellPosition;
-bool hasMoved=false;
-if(Keyboard.current.upArrowKey.wasPressedThisFrame)
-{           
-newCellTarget.y+=1;           
-hasMoved=true;
-}
-else if(Keyboard.current.downArrowKey.wasPressedThisFrame)
-{           
-newCellTarget.y-=1;           
-hasMoved=true;
-}
-else if(Keyboard.current.rightArrowKey.wasPressedThisFrame)
-{           
-newCellTarget.x+=1;           
-hasMoved=true;
-}
-else if(Keyboard.current.leftArrowKey.wasPressedThisFrame)
-{           
-newCellTarget.x-=1;           
-hasMoved=true;
-}
-if(hasMoved)
-{
-//check if the new position is passable, then move there if it 
-is.BoardManager.CellData cellData= m_Board.GetCellData(newCellTarget);
-if(cellData!=null&& cellData.Passable){MoveTo(newCellTarget);
-}
-}
-}
-}
 ```

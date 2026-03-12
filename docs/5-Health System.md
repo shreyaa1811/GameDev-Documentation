@@ -18,10 +18,11 @@
 - The **?** is a special C# syntax used to test if **OnTick** is null. If it’s null, ? does nothing, but if it’s not null, ? will call the method on the right of the ?. It’s a shorthand version that does the same thing as:
 
 ```csharp
-if(OnTick!=null)
-{   
-OnTick.Invoke();
+if (OnTick != null)
+{
+    OnTick.Invoke();
 }
+
 ```
 
 - You need to test if **OnTick** is null because if no other part of the code registered a callback function to **OnTick**, then it will be null, and trying to call **Invoke** on a null object will generate an error and break the game!
@@ -31,19 +32,23 @@ OnTick.Invoke();
     - Register the **OnTurnHappen** method to your **TurnManager.OnTick** callback.
 
 ```csharp
-private int m_FoodAmount=100;
-...voidStart()
-{   
-TurnManager=newTurnManager();   
-TurnManager.OnTick+= OnTurnHappen;
-BoardManager.Init();   
-PlayerController.Spawn(BoardManager,newVector2Int(1,1));
+private int m_FoodAmount = 100;
+
+private void Start()
+{
+    TurnManager = new TurnManager();
+    TurnManager.OnTick += OnTurnHappen;
+
+    BoardManager.Init();
+    PlayerController.Spawn(BoardManager, new Vector2Int(1, 1));
 }
-void OnTurnHappen()
-{   
-m_FoodAmount-=1;   
-Debug.Log("Current amount of food : "+ m_FoodAmount);
+
+private void OnTurnHappen()
+{
+    m_FoodAmount -= 1;
+    Debug.Log("Current amount of food: " + m_FoodAmount);
 }
+
 ```
 
 **TurnManager.OnTick += OnTurnHappen** is how you register a method callback to the **OnTick** event. When **OnTick** has its **Invoke** method called, it calls the **OnTurnHappen** method. **+=** is used because we add the method to all the other ones already registered (right now there is a single one, but later you’ll have more methods called when **OnTick** happens).
@@ -144,17 +149,23 @@ You can now assign your UI Document (the component on the **UIDocument** GameO
 You can then add the code that finds the Label inside your GameUI and update its text to the Food count in the **GameManager** **Start** method:
 
 ```csharp
+using UnityEngine;
 using UnityEngine.UIElements;
-public class GameManager:MonoBehaviour
+
+public class GameManager : MonoBehaviour
 {
-...public UIDocument UIDoc;
-private Label m_FoodLabel;...
-void Start()
-{    
-m_FoodLabel= UIDoc.rootVisualElement.Q<Label>("FoodLabel");    
-m_FoodLabel.text="Food : "+ m_FoodAmount;...
-}...
+    public UIDocument UIDoc;
+
+    private Label m_FoodLabel;
+    private int m_FoodAmount = 100;
+
+    private void Start()
+    {
+        m_FoodLabel = UIDoc.rootVisualElement.Q<Label>("FoodLabel");
+        m_FoodLabel.text = "Food : " + m_FoodAmount;
+    }
 }
+
 ```
 
 - **UIDocument** has a .**rootVisualElement** property that is the root (the first element) of the **Hierarchy** window you saw in the **UIBuilder** window earlier. All elements in the **Hierarchy** window (like the label) are child elements of that root element..
@@ -169,11 +180,13 @@ You should now have your food count at the bottom of your screen.
 However, you’ll notice that the counter doesn’t update when the player character moves. For this, you have to replace the **Debug.Log** you wrote earlier in the **OnTurnHappen** method with the following:
 
 ```csharp
-voidOnTurnHappen()
-{   
-m_FoodAmount-=1;   
-m_FoodLabel.text="Food : "+ m_FoodAmount;
+private void OnTurnHappen()
+{
+    m_FoodAmount -= 1;
+    m_FoodLabel.text = "Food : " + m_FoodAmount;
 }
+
+
 ```
 
 Now, if you enter Play mode and move around, the food counter will decrease
@@ -189,9 +202,10 @@ You already have **CellData** for each cell in the game, and you use it to sto
 ```csharp
 public class CellData
 {
-public bool Passable;
-public GameObject ContainedObject;
+    public bool Passable;
+    public GameObject ContainedObject;
 }
+
 ```
 
 **2.** Drag your preferred food sprite into the scene to create a new GameObject with that sprite, name it “SmallFood”, set its **order in layer** to something between **1** and **9**.
@@ -211,22 +225,26 @@ public GameObject FoodPrefab;
 **6.** Write a new void method named “GenerateFood”, then copy and paste the following code into that method:
 
 ```csharp
-void GenerateFood()
+private void GenerateFood()
 {
-int foodCount=5;
-for(int i=0; i< foodCount;++i)
-{
-int randomX= Random.Range(1, Width-1);
-int randomY= Random.Range(1, Height-1);
-CellData data= m_BoardData[randomX, randomY];
-if(data.Passable&& data.ContainedObject==null)
-{
-GameObject newFood=Instantiate(FoodPrefab);           
-newFood.transform.position=CellToWorld(newVector2Int(randomX, randomY));           
-data.ContainedObject= newFood;
+    int foodCount = 5;
+
+    for (int i = 0; i < foodCount; ++i)
+    {
+        int randomX = Random.Range(1, Width - 1);
+        int randomY = Random.Range(1, Height - 1);
+
+        CellData data = m_BoardData[randomX, randomY];
+
+        if (data.Passable && data.ContainedObject == null)
+        {
+            GameObject newFood = Instantiate(FoodPrefab);
+            newFood.transform.position = CellToWorld(new Vector2Int(randomX, randomY));
+            data.ContainedObject = newFood;
+        }
+    }
 }
-}
-}
+
 ```
 
 - Creates an **int** variable that stores how many food prefabs will be created (making a variable allows you to easily change it to test different values)
@@ -238,32 +256,38 @@ data.ContainedObject= newFood;
 **7.** Call this new method at the end of the **Init** method of the **BoardManager**, once the level has been created.
 
 ```csharp
-public  voidInit()
+public void Init()
 {
-m_Tilemap=GetComponentInChildren<Tilemap>();        
-m_Grid=GetComponentInChildren<Grid>();
-m_BoardData=newCellData[Width, Height];
-for(int y=0; y< Height;++y)
-{
-for(int x=0; x< Width;++x)
-{
-Tile tile;                
-m_BoardData[x, y]=newCellData();
-if(x==0|| y==0|| x== Width-1|| y== Height-1)
-{                    
-tile= WallTiles[Random.Range(0, WallTiles.Length)];                    
-m_BoardData[x, y].Passable=false;
+    m_Tilemap = GetComponentInChildren<Tilemap>();
+    m_Grid = GetComponentInChildren<Grid>();
+
+    m_BoardData = new CellData[Width, Height];
+
+    for (int y = 0; y < Height; ++y)
+    {
+        for (int x = 0; x < Width; ++x)
+        {
+            Tile tile;
+            m_BoardData[x, y] = new CellData();
+
+            if (x == 0 || y == 0 || x == Width - 1 || y == Height - 1)
+            {
+                tile = WallTiles[Random.Range(0, WallTiles.Length)];
+                m_BoardData[x, y].Passable = false;
+            }
+            else
+            {
+                tile = GroundTiles[Random.Range(0, GroundTiles.Length)];
+                m_BoardData[x, y].Passable = true;
+            }
+
+            m_Tilemap.SetTile(new Vector3Int(x, y, 0), tile);
+        }
+    }
+
+    GenerateFood();
 }
-else
-{                    
-tile= GroundTiles[Random.Range(0, GroundTiles.Length)];                    
-m_BoardData[x, y].Passable=true;
-}
-m_Tilemap.SetTile(newVector3Int(x, y,0), tile);
-}               
-}
-GenerateFood();
-}
+
 ```
 
 **8.** Save your changes to the scripts, assign your SmallFood prefab to the **FoodPrefab** slot on the **BoardManager** in the **Inspector** window, and then enter Play mode to check if food appears on your map.
@@ -271,36 +295,29 @@ GenerateFood();
 **9.** Add a new variable called “m_EmptyCellsList” of type **List** containing **Vector2Int** in the **BoardManager** script. You’ll need to add **using** **System.Collections.Generic** at the top of your file to be able to use **List:**
 
 ```csharp
-public voidInit()
-{   
-m_Tilemap=GetComponentInChildren<Tilemap>();   
-m_Grid=GetComponentInChildren<Grid>();
-//Initialize the list   
-m_EmptyCellsList=newList<Vector2Int>();
-m_BoardData=newCellData[Width, Height];
+public void Init()
+{
+    m_Tilemap = GetComponentInChildren<Tilemap>();
+    m_Grid = GetComponentInChildren<Grid>();
 
-for(int y=0; y< Height;++y)
-{
-for(int x=0; x< Width;++x)
-{
-Tile tile;           
-m_BoardData[x, y]=newCellData();
-if(x==0|| y==0|| x== Width-1|| y== Height-1)
-{               
-tile= WallTiles[Random.Range(0, WallTiles.Length)];               
-m_BoardData[x, y].Passable=false;
-}
-else
-{               
-tile= GroundTiles[Random.Range(0, GroundTiles.Length)];               
-m_BoardData[x, y].Passable=true;
-//this is a passable empty cell, add it to the list               
-m_EmptyCellsList.Add(newVector2Int(x, y));
-}
-m_Tilemap.SetTile(newVector3Int(x, y,0), tile);}}
-//remove the starting point of the player, It's not empty, the player is there   
-m_EmptyCellsList.Remove(newVector2Int(1,1));GenerateFood();
-}
+    // Initialize the list
+    m_EmptyCellsList = new List<Vector2Int>();
+
+    m_BoardData = new CellData[Width, Height];
+
+    for (int y = 0; y < Height; ++y)
+    {
+        for (int x = 0; x < Width; ++x)
+        {
+            Tile tile;
+            m_BoardData[x, y] = new CellData();
+
+            if (x == 0 || y == 0 || x == Width - 1 || y == Height - 1)
+            {
+                tile = WallTiles[Random.Range(0, WallTiles.Length)];
+                m_BoardData[x, y].Passable = false;
+            }
+            else
 ```
 
 ```csharp
@@ -312,20 +329,26 @@ You can replace picking a random coordinate in the **GenerateFood** method wit
 This is the final version of GenerateFood using the empty cell list :
 
 ```csharp
-void GenerateFood()
+private void GenerateFood()
 {
-int foodCount=5;
-for(int i=0; i< foodCount;++i)
-{
-int randomIndex= Random.Range(0, m_EmptyCellsList.Count);
-Vector2Int coord= m_EmptyCellsList[randomIndex];
-       m_EmptyCellsList.RemoveAt(randomIndex);
-       CellData data= m_BoardData[coord.x, coord.y];
-       GameObject newFood=Instantiate(FoodPrefab);       
-       newFood.transform.position=CellToWorld(coord);       
-       data.ContainedObject= newFood;
-       }
-       }
+    int foodCount = 5;
+
+    for (int i = 0; i < foodCount; ++i)
+    {
+        int randomIndex = Random.Range(0, m_EmptyCellsList.Count);
+        Vector2Int coord = m_EmptyCellsList[randomIndex];
+
+        m_EmptyCellsList.RemoveAt(randomIndex);
+
+        CellData data = m_BoardData[coord.x, coord.y];
+
+        GameObject newFood = Instantiate(FoodPrefab);
+        newFood.transform.position = CellToWorld(coord);
+
+        data.ContainedObject = newFood;
+    }
+}
+
 ```
 
 ## 5.5 **Collect food**
@@ -351,14 +374,15 @@ The **PlayerEntered** method will be empty in that base class because by defau
 
 ```csharp
 using UnityEngine;
-public class CellObject:MonoBehaviour
-{
-//Called when the player enter the cell in which that object is
-public virtual void PlayerEntered()
-{
 
+public class CellObject : MonoBehaviour
+{
+    // Called when the player enters the cell containing this object
+    public virtual void PlayerEntered()
+    {
+    }
 }
-}
+
 ```
 
 **2.** In the **Project** window, under the **Assets** folder, right-click the **Scripts** folder and select **Create** > **Scripting** > **MonoBehaviour Script**, and name it “FoodObject”.
@@ -367,15 +391,18 @@ public virtual void PlayerEntered()
 
 ```csharp
 using UnityEngine;
-public class FoodObject:CellObject
+
+public class FoodObject : CellObject
 {
-public override void PlayerEntered()
-{ 
-Destroy(gameObject);
-//increase food       
-Debug.Log("Food increased");
+    public override void PlayerEntered()
+    { 
+        Destroy(gameObject);
+
+        // increase food
+        Debug.Log("Food increased");
+    }
 }
-}
+
 ```
 
 For now, this will just destroy the **FoodObject** GameObject and write something in the console to show it happened. This is enough to test if the code works.
@@ -385,9 +412,10 @@ For now, this will just destroy the **FoodObject** GameObject and write someth
 ```csharp
 public class CellData
 {
-public bool Passable;
-public CellObject ContainedObject;
+    public bool Passable;
+    public CellObject ContainedObject;
 }
+
 ```
 
 This will generate a couple of errors in your console you should be able to fix.The fixes are below, but see if you can figure them out for yourself before you look at the solutions!
@@ -400,20 +428,23 @@ Here are the bug fixes:
 **5.** In your **PlayerController** script, when the player enters a new cell, if it contains an object, call **PlayerEntered** on it:
 
 ```csharp
-if(hasMoved)
+if (hasMoved)
 {
-//check if the new position is passable, then move there if it is. 
-BoardManager.CellData cellData= m_Board.GetCellData(newCellTarget);
-if(cellData!=null&& cellData.Passable)
-{       
-GameManager.Instance.TurnManager.Tick();
-MoveTo(newCellTarget);
-if(cellData.ContainedObject!=null)
-{           
-cellData.ContainedObject.PlayerEntered();
+    // check if the new position is passable, then move there if it is.
+    BoardManager.CellData cellData = m_Board.GetCellData(newCellTarget);
+
+    if (cellData != null && cellData.Passable)
+    {
+        GameManager.Instance.TurnManager.Tick();
+        MoveTo(newCellTarget);
+
+        if (cellData.ContainedObject != null)
+        {
+            cellData.ContainedObject.PlayerEntered();
+        }
+    }
 }
-}
-}
+
 ```
 
 Virtual methods allow you to change the behavior of a method in a subclass. In this case, **CellData** keeps a reference to a **CellObject**, but this reference can point to an object of any subclass of **CellObject** (in this case, **FoodObject**). When you call **PlayerEntered**, the correct overridden method will be automatically called, based on the **actual** type of the stored object. In this case, because **ContainedObject** will actually point to a **FoodObject**, it is its **PlayerEntered** method that will be called, not the empty **CellObject method**.
@@ -431,26 +462,31 @@ So far, the console is only outputting when the player character collects a **F
 ```csharp
 void OnTurnHappen() 
 {
-ChangeFood(-1);
+    ChangeFood(-1);
 }
+
 public void ChangeFood(int amount)
-{   
-m_FoodAmount+= amount;   
-m_FoodLabel.text="Food : "+ m_FoodAmount;
+{
+    m_FoodAmount += amount;
+    m_FoodLabel.text = "Food : " + m_FoodAmount;
 }
+
 ```
 
 ### **FoodObject**
 
 ```csharp
-public class FoodObject:CellObject
+public class FoodObject : CellObject
 {
-public int AmountGranted=10;
-public override void PlayerEntered()
-{
-Destroy(gameObject);
-//increase food       
-GameManager.Instance.ChangeFood(AmountGranted);
+    public int AmountGranted = 10;
+
+    public override void PlayerEntered()
+    {
+        Destroy(gameObject);
+
+        // increase food
+        GameManager.Instance.ChangeFood(AmountGranted);
+    }
 }
-}
+
 ```

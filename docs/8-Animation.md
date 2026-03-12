@@ -110,43 +110,64 @@ Repeat the above steps, but this time start with from the **Walk** to the **I
 - Everywhere inside code where you alter the **IsMoving** variable, you need to also call the function **SetBool** on the Animator component’s **Moving** bool.
 
 ```csharp
-public class PlayerController:MonoBehaviour{...
-private Animator m_Animator;
-private void Awake()
-{       
-m_Animator=GetComponent<Animator>();
-}...
-public void MoveTo(Vector2Int cell,bool immediate)
-{       
-m_CellPosition= cell;
-if(immediate)
-{           
-m_IsMoving=false;           
-transform.position= m_Board.CellToWorld(m_CellPosition);
-}
-else
-{           
-m_IsMoving=true;           
-m_MoveTarget= m_Board.CellToWorld(m_CellPosition);
-}
-m_Animator.SetBool("Moving", m_IsMoving);
-}
-private void Update()
+public class PlayerController : MonoBehaviour
 {
-...
-if(m_IsMoving)
-{           
-transform.position= Vector3.MoveTowards(transform.position, m_MoveTarget, MoveSpeed* Time.deltaTime);
-if(transform.position== m_MoveTarget)
-{               
-m_IsMoving=false;               
-m_Animator.SetBool("Moving",false);
-var cellData= m_Board.GetCellData(m_CellPosition);
-if(cellData.ContainedObject!=null)                   
-cellData.ContainedObject.PlayerEntered();
+    ...
+    private Animator m_Animator;
+
+    private void Awake()
+    {       
+        m_Animator = GetComponent<Animator>();
+    }
+
+    ...
+    
+    public void MoveTo(Vector2Int cell, bool immediate)
+    {       
+        m_CellPosition = cell;
+
+        if (immediate)
+        {           
+            m_IsMoving = false;
+            transform.position = m_Board.CellToWorld(m_CellPosition);
+        }
+        else
+        {           
+            m_IsMoving = true;
+            m_MoveTarget = m_Board.CellToWorld(m_CellPosition);
+        }
+
+        m_Animator.SetBool("Moving", m_IsMoving);
+    }
+
+    private void Update()
+    {
+        ...
+        if (m_IsMoving)
+        {           
+            transform.position = Vector3.MoveTowards(
+                transform.position,
+                m_MoveTarget,
+                MoveSpeed * Time.deltaTime
+            );
+
+            if (transform.position == m_MoveTarget)
+            {               
+                m_IsMoving = false;
+                m_Animator.SetBool("Moving", false);
+
+                var cellData = m_Board.GetCellData(m_CellPosition);
+                if (cellData.ContainedObject != null)
+                    cellData.ContainedObject.PlayerEntered();
+            }
+
+            return;
+        }
+
+        ...
+    }
 }
-return;
-}
+
 ```
 
 **Note:** String base lookup on the Animator component is inefficient, and the efficient way is to store a reference to the Hash of **Moving** with the **Animator.StringToHash** function.

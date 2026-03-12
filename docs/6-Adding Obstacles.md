@@ -27,31 +27,40 @@ public class WallObject:CellObject{}
 The **GenerateWall** function will spawn a certain number of walls in the level.
 
 ```csharp
-voidGenerateWall()
+void GenerateWall()
 {
-int wallCount= Random.Range(6,10);
-for(int i=0; i< wallCount;++i)
-{
-int randomIndex= Random.Range(0, m_EmptyCellsList.Count);
-Vector2Int coord= m_EmptyCellsList[randomIndex];
-       m_EmptyCellsList.RemoveAt(randomIndex);
-       CellData data= m_BoardData[coord.x, coord.y];
-       WallObject newWall=Instantiate(WallPrefab);
-       newWall.transform.position=CellToWorld(coord);
-       data.ContainedObject= newWall;
-       }
-       }
+    int wallCount = Random.Range(6, 10);
+
+    for (int i = 0; i < wallCount; ++i)
+    {
+        int randomIndex = Random.Range(0, m_EmptyCellsList.Count);
+        Vector2Int coord = m_EmptyCellsList[randomIndex];
+
+        m_EmptyCellsList.RemoveAt(randomIndex);
+
+        CellData data = m_BoardData[coord.x, coord.y];
+
+        WallObject newWall = Instantiate(WallPrefab);
+        newWall.transform.position = CellToWorld(coord);
+
+        data.ContainedObject = newWall;
+    }
+}
+
 ```
 
 **5.** Call the above **GenerateWall** method inside the **Init** method, before the call to the **GenerateFood** function.
 
 ```csharp
-publicvoidInit()
-{...
-(allcode above)GenerateWal();
-// new line
-GenerateFood();
+public void Init()
+{
+    ...
+    GenerateWall();
+
+    // new line
+    GenerateFood();
 }
+
 ```
 
 This way all the cells that will generate walls will be removed from the empty cell list and food won’t be able to generate there.
@@ -68,18 +77,20 @@ The goal is for the code to perform an action when the **CellObject** is place
 We can combine all these requirements into an **Init** virtual function that takes a **Vector2Int** storing the coordinate of the cell it’s placed on.
 
 ```csharp
-public class CellObject:MonoBehaviour
+public class CellObject : MonoBehaviour
 {
-protected Vector2Int m_Cell;
-public virtual void Init(Vector2Int cell)
-{       
-m_Cell= cell;
-}
-public virtual void PlayerEntered()
-{
+    protected Vector2Int m_Cell;
 
+    public virtual void Init(Vector2Int cell)
+    {       
+        m_Cell = cell;
+    }
+
+    public virtual void PlayerEntered()
+    {
+    }
 }
-}
+
 ```
 
 **Note**: **m_Cell** is protected**,** not private. **Private** would make it inaccessible to the subclasses of **CellObject** like **FoodObject** or **WallObject**. Instead, **protected** will let other subclasses like **WallObject** access it, while still hiding it from other unrelated classes.
@@ -89,27 +100,37 @@ public virtual void PlayerEntered()
 ```csharp
 void GenerateWall()
 {
-int wallCount= Random.Range(6,10);
-for(int i=0; i< wallCount;++i)
-{
-int randomIndex= Random.Range(0, m_EmptyCellsList.Count);
-Vector2Int coord= m_EmptyCellsList[randomIndex];
-       m_EmptyCellsList.RemoveAt(randomIndex);
-       CellData data= m_BoardData[coord.x, coord.y];
-       WallObject newWall=Instantiate(WallPrefab);
-//init the wall       
-newWall.Init(coord);
-       newWall.transform.position=CellToWorld(coord);
-       data.ContainedObject= newWall;}}
+    int wallCount = Random.Range(6, 10);
+
+    for (int i = 0; i < wallCount; ++i)
+    {
+        int randomIndex = Random.Range(0, m_EmptyCellsList.Count);
+        Vector2Int coord = m_EmptyCellsList[randomIndex];
+
+        m_EmptyCellsList.RemoveAt(randomIndex);
+
+        CellData data = m_BoardData[coord.x, coord.y];
+
+        WallObject newWall = Instantiate(WallPrefab);
+
+        // init the wall
+        newWall.Init(coord);
+
+        newWall.transform.position = CellToWorld(coord);
+        data.ContainedObject = newWall;
+    }
+}
+
 ```
 
 **7.** Add the following new method to **BoardManager**:
 
 ```csharp
-public void SetCellTile(Vector2Int cellIndex,Tile tile)
-{   
-m_Tilemap.SetTile(newVector3Int(cellIndex.x, cellIndex.y,0), tile);
+public void SetCellTile(Vector2Int cellIndex, Tile tile)
+{
+    m_Tilemap.SetTile(new Vector3Int(cellIndex.x, cellIndex.y, 0), tile);
 }
+
 ```
 
 **8.** Add the following code to your script:
@@ -117,15 +138,18 @@ m_Tilemap.SetTile(newVector3Int(cellIndex.x, cellIndex.y,0), tile);
 ```csharp
 using UnityEngine;
 using UnityEngine.Tilemaps;
-public class WallObject:CellObject
+
+public class WallObject : CellObject
 {
-public Tile ObstacleTile;
-public override void Init(Vector2Int cell)
-{
-base.Init(cell);       
-GameManager.Instance.BoardManager.SetCellTile(cell, ObstacleTile);
+    public Tile ObstacleTile;
+
+    public override void Init(Vector2Int cell)
+    {
+        base.Init(cell);
+        GameManager.Instance.BoardManager.SetCellTile(cell, ObstacleTile);
+    }
 }
-}
+
 ```
 
 **9.** Save your scripts. Select the Wall prefab and, in the **Inspector** window, assign the tile you want to use to the **Obstacle Tile** slot.
@@ -137,29 +161,33 @@ However, the player character can still move on top of the walls. This is becaus
 A new virtual **PlayerWantsToEnter** method in **CellObject** can serve this purpose. The player character movement code calls this method on the object in a cell when the player character tries to move there, and this method either returns true if the player character can enter the cell (like for **FoodObject**) or cannot (like for **WallObject**):
 
 ```csharp
-public virtual bool layerWantsToEnter()
+public virtual bool PlayerWantsToEnter()
 {
-return true;
+    return true;
 }
+
 ```
 
 Then you can use that new method by modifying the code in the **if(haseMoved)** condition from the **Update** function of the **PlayerController**:
 
 ```csharp
-if(cellData!=null&& cellData.Passable)
+if (cellData != null && cellData.Passable)
 {
-   GameManager.Instance.TurnManager.Tick();
-if(cellData.ContainedObject==null)
-{
-MoveTo(newCellTarget);
+    GameManager.Instance.TurnManager.Tick();
+
+    if (cellData.ContainedObject == null)
+    {
+        MoveTo(newCellTarget);
+    }
+    else if (cellData.ContainedObject.PlayerWantsToEnter())
+    {
+        MoveTo(newCellTarget);
+
+        // Call PlayerEntered AFTER moving the player, otherwise not in the cell yet
+        cellData.ContainedObject.PlayerEntered();
+    }
 }
-else if(cellData.ContainedObject.PlayerWantsToEnter())
-{
-MoveTo(newCellTarget);
-//Call PlayerEntered AFTER moving the player, Otherwise not in cell yet       
-cellData.ContainedObject.PlayerEntered();
-}
-}
+
 ```
 
 Let’s take a closer look at the lines of code above:
@@ -170,9 +198,22 @@ Let’s take a closer look at the lines of code above:
     - If the cell has a cell object, it will call **PlayerWantsToEnter** on that cell object and if that returns **true**, then the player character can enter.
 
 ```csharp
-publicclassWallObject:CellObject{publicTile ObstacleTile;
-publicoverridevoidInit(Vector2Int cell){base.Init(cell);       GameManager.Instance.BoardManager.SetCellTile(cell, ObstacleTile);}
-publicoverrideboolPlayerWantsToEnter(){returnfalse;}}
+public class WallObject : CellObject
+{
+    public Tile ObstacleTile;
+
+    public override void Init(Vector2Int cell)
+    {
+        base.Init(cell);
+        GameManager.Instance.BoardManager.SetCellTile(cell, ObstacleTile);
+    }
+
+    public override bool PlayerWantsToEnter()
+    {
+        return false;
+    }
+}
+
 ```
 
 Now if you enter Play mode, your newly placed wall should stop the player character from moving to the cell.
@@ -180,40 +221,35 @@ Now if you enter Play mode, your newly placed wall should stop the player charac
 ## 6.2 Refactoring
 
 ```csharp
-void AddObject(CellObject obj,Vector2Int coord)
+void AddObject(CellObject obj, Vector2Int coord)
 {
-CellData data= m_BoardData[coord.x, coord.y];   
-obj.transform.position=CellToWorld(coord);   
-data.ContainedObject= obj;   
-obj.Init(coord);
+    CellData data = m_BoardData[coord.x, coord.y];
+
+    obj.transform.position = CellToWorld(coord);
+    data.ContainedObject = obj;
+
+    obj.Init(coord);
 }
+
 ```
 
 ```csharp
 void GenerateWall()
 {
-int wallCount= Random.Range(6,10);
-for(int i=0; i< wallCount;++i)
-{
-int randomIndex= Random.Range(0, m_EmptyCellsList.Count);
-Vector2Int coord= m_EmptyCellsList[randomIndex];
-       m_EmptyCellsList.RemoveAt(randomIndex);
-       WallObject newWall=Instantiate(WallPrefab);
-       AddObject(newWall, coord);
-       }
-       }
-void GenerateFood()
-{
-int foodCount=5;
-for(int i=0; i< foodCount;++i)
-{
-int randomIndex= Random.Range(0, m_EmptyCellsList.Count);
-Vector2Int coord= m_EmptyCellsList[randomIndex];
-       m_EmptyCellsList.RemoveAt(randomIndex);
-       FoodObject newFood=Instantiate(FoodPrefab);
-       AddObject(newFood, coord);
-       }
-       }
+    int wallCount = Random.Range(6, 10);
+
+    for (int i = 0; i < wallCount; ++i)
+    {
+        int randomIndex = Random.Range(0, m_EmptyCellsList.Count);
+        Vector2Int coord = m_EmptyCellsList[randomIndex];
+
+        m_EmptyCellsList.RemoveAt(randomIndex);
+
+        WallObject newWall = Instantiate(WallPrefab);
+        AddObject(newWall, coord);
+    }
+}
+
 ```
 
 ## 6.3 **Damaging walls**
@@ -227,31 +263,40 @@ Currently when the player bumps into a wall cell, they won't be able to move, bu
 ### **WallObject**
 
 ```csharp
-public class WallObject:CellObject
+public class WallObject : CellObject
 {
-public Tile ObstacleTile;
-public int MaxHealth=3;
-private int m_HealthPoint;
-private Tile m_OriginalTile;
-public override void Init(Vector2Int cell)
-{
-base.Init(cell);
-       m_HealthPoint= MaxHealth;
-       m_OriginalTile= GameManager.Instance.BoardManager.GetCellTile(cell);       
-       GameManager.Instance.BoardManager.SetCellTile(cell, ObstacleTile);
-       }
-public override bool PlayerWantsToEnter()
-{
-       m_HealthPoint-=1;
-if(m_HealthPoint>0)
-{
-return false;
+    public Tile ObstacleTile;
+    public int MaxHealth = 3;
+
+    private int m_HealthPoint;
+    private Tile m_OriginalTile;
+
+    public override void Init(Vector2Int cell)
+    {
+        base.Init(cell);
+
+        m_HealthPoint = MaxHealth;
+        m_OriginalTile = GameManager.Instance.BoardManager.GetCellTile(cell);
+
+        GameManager.Instance.BoardManager.SetCellTile(cell, ObstacleTile);
+    }
+
+    public override bool PlayerWantsToEnter()
+    {
+        m_HealthPoint -= 1;
+
+        if (m_HealthPoint > 0)
+        {
+            return false;
+        }
+
+        GameManager.Instance.BoardManager.SetCellTile(m_Cell, m_OriginalTile);
+        Destroy(gameObject);
+
+        return true;
+    }
 }
-       GameManager.Instance.BoardManager.SetCellTile(m_Cell, m_OriginalTile);
-       Destroy(gameObject);
-       return true;
-       }
-       }
+
 ```
 
 ### **BoardManager**
@@ -259,7 +304,7 @@ return false;
 ```csharp
 public Tile GetCellTile(Vector2Int cellIndex)
 {
-return m_Tilemap.GetTile<Tile>(newVector3Int(cellIndex.x,cellIndex.y,0))
-;
+    return m_Tilemap.GetTile<Tile>(new Vector3Int(cellIndex.x, cellIndex.y, 0));
 }
+
 ```

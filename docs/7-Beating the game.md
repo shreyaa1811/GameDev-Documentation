@@ -15,19 +15,23 @@ To do this, you’ll need to do the following:
 ```csharp
 using UnityEngine;
 using UnityEngine.Tilemaps;
-public class ExitCellObject:CellObject
+
+public class ExitCellObject : CellObject
 {
-public Tile EndTile;
-public override void Init(Vector2Int coord)
-{
-base.Init(coord);       
-GameManager.Instance.BoardManager.SetCellTile(coord, EndTile);
+    public Tile EndTile;
+
+    public override void Init(Vector2Int coord)
+    {
+        base.Init(coord);
+        GameManager.Instance.BoardManager.SetCellTile(coord, EndTile);
+    }
+
+    public override void PlayerEntered()
+    {       
+        Debug.Log("Reached the exit cell");
+    }
 }
-publicoverridevoidPlayerEntered()
-{       
-Debug.Log("Reached the exit cell");
-}
-}
+
 ```
 
 **1.** Add a new empty GameObject to your scene, rename it “ExitCell”, and add the above script to it.
@@ -39,21 +43,31 @@ Debug.Log("Reached the exit cell");
 **4.** Inside the **Init** function, after the **for** loops that generate the board, add the following code:
 
 ```csharp
-public class BoardManager:MonoBehaviour
+public class BoardManager : MonoBehaviour
 {
-public Exit CellObject ExitCellPrefab;
-...
-publicvoidInit()
-{
-...for(int y=0; y< Height;++y)
-{...
+    public ExitCellObject ExitCellPrefab;
+    ...
+    
+    public void Init()
+    {
+        ...
+        for (int y = 0; y < Height; ++y)
+        {
+            ...
+        }
+
+        m_EmptyCellsList.Remove(new Vector2Int(1, 1));
+
+        Vector2Int endCoord = new Vector2Int(Width - 2, Height - 2);
+        AddObject(Instantiate(ExitCellPrefab), endCoord);
+
+        m_EmptyCellsList.Remove(endCoord);
+
+        GateWall();
+        GenerateFood();
+    }
 }
-   m_EmptyCellsList.Remove(newVector2Int(1,1));
-Vector2Int endCoord=newVector2Int(Width-2, Height-2);
-AddObject(Instantiate(ExitCellPrefab), endCoord);   
-m_EmptyCellsList.Remove(endCoord);
-GateWall();GenerateFood();
- }
+
 ```
 
 ![](https://connect-mediagw.unity.com/h1/20240927/learn/images/9d46d683-a30d-4fc9-88f6-9827dbe97bc2_game-view-exit.png)
@@ -68,47 +82,57 @@ GateWall();GenerateFood();
 ```csharp
 public void Clean()
 {
-//no board data, so exit early, nothing to clean
-if(m_BoardData==null)
-return;
+    // no board data, so exit early — nothing to clean
+    if (m_BoardData == null)
+        return;
 
-for(int y=0; y< Height;++y)
-{
-for(int x=0; x< Width;++x)
-{
-var cellData= m_BoardData[x, y];
-if(cellData.ContainedObject!=null)
-{
-//CAREFUL! Destroy the GameObject NOT just cellData.ContainedObject
-//Otherwise what you are destroying is the JUST CellObject COMPONENT
-//and not the whole gameobject with sprite
-Destroy(cellData.ContainedObject.gameObject);
+    for (int y = 0; y < Height; ++y)
+    {
+        for (int x = 0; x < Width; ++x)
+        {
+            var cellData = m_BoardData[x, y];
+
+            if (cellData.ContainedObject != null)
+            {
+                // CAREFUL! Destroy the GameObject, NOT just cellData.ContainedObject
+                // Otherwise you destroy only the CellObject component,
+                // not the whole GameObject with its sprite.
+                Destroy(cellData.ContainedObject.gameObject);
+            }
+
+            SetCellTile(new Vector2Int(x, y), null);
+        }
+    }
 }
-SetCellTile(newVector2Int(x,y),null);
-}
-}
-}
+
 ```
 
 ### **GameManager**
 
 ```csharp
-private int m_CurrentLevel=1;
-...voidStart()
-{   
-TurnManager=newTurnManager();   
-TurnManager.OnTick+= OnTurnHappen;
-NewLevel();
-   m_FoodLabel= UIDoc.rootVisualElement.Q<Label>("FoodLabel");   
-   m_FoodLabel.text="Food : "+ m_FoodAmount;
-   }
+private int m_CurrentLevel = 1;
+
+void Start()
+{
+    TurnManager = new TurnManager();
+    TurnManager.OnTick += OnTurnHappen;
+
+    NewLevel();
+
+    m_FoodLabel = UIDoc.rootVisualElement.Q<Label>("FoodLabel");
+    m_FoodLabel.text = "Food : " + m_FoodAmount;
+}
+
 public void NewLevel()
-{   
-BoardManager.Clean();   
-BoardManager.Init();   
-PlayerController.Spawn(BoardManager,newVector2Int(1,1));
-   m_CurrentLevel++;
-   }
+{
+    BoardManager.Clean();
+    BoardManager.Init();
+
+    PlayerController.Spawn(BoardManager, new Vector2Int(1, 1));
+
+    m_CurrentLevel++;
+}
+
 ```
 
 ### **ExitCellObject**
@@ -116,8 +140,9 @@ PlayerController.Spawn(BoardManager,newVector2Int(1,1));
 ```csharp
 public override void PlayerEntered()
 {
-   GameManager.Instance.NewLevel();
-   }
+    GameManager.Instance.NewLevel();
+}
+
 ```
 
 ## 7.3 Game Over
@@ -166,17 +191,19 @@ The Game Over **Text** property is a placeholder to help you design its look; 
 - One of type **Label** to store a reference to the **GameOverMessage** Element so you can update it when the **GameOver** condition happens.
 
 ```csharp
-private VisualElement 
-m_GameOverPanel;
+private VisualElement m_GameOverPanel;
 private Label m_GameOverMessage;
+
 ```
 
 **8.** In the **Start** function of the **GameManager,** you need to retrieve The **GameOverPanel** VisualElement and the **GameOverMessage** Label from the **UI Document** root **VisualElement** and set the visibility of the panel to **Hidden**:
 
 ```csharp
-m_GameOverPanel= UIDoc.rootVisualElement.Q<VisualElement>("GameOverPanel");
-m_GameOverMessage= m_GameOverPanel.Q<Label>("GameOverMessage");
-m_GameOverPanel.style.visibility= Visibility.Hidden;
+m_GameOverPanel = UIDoc.rootVisualElement.Q<VisualElement>("GameOverPanel");
+m_GameOverMessage = m_GameOverPanel.Q<Label>("GameOverMessage");
+
+m_GameOverPanel.style.visibility = Visibility.Hidden;
+
 ```
 
 **9.** In the **ChangeFood** function of the **GameManager**, you need to test if the food Amount is 0 or less. If it is, this is the Game Over condition, which means you need to set the visibility of the **GameOverPanel** GameObject to **Visible** and display the message with the number of completed levels.
@@ -184,14 +211,17 @@ m_GameOverPanel.style.visibility= Visibility.Hidden;
 ```csharp
 public void ChangeFood(int amount) 
 {  
- m_FoodAmount+= amount;   
- m_FoodLabel.text="Food : "+ m_FoodAmount;
-if(m_FoodAmount<=0)
-{       
-m_GameOverPanel.style.visibility= Visibility.Visible;      
-m_GameOverMessage.text="Game Over!\n\nYou traveled through "+ m_CurrentLevel+" levels";
+    m_FoodAmount += amount;   
+    m_FoodLabel.text = "Food : " + m_FoodAmount;
+
+    if (m_FoodAmount <= 0)
+    {       
+        m_GameOverPanel.style.visibility = Visibility.Visible;
+        m_GameOverMessage.text = 
+            "Game Over!\n\nYou traveled through " + m_CurrentLevel + " levels";
+    }
 }
-}
+
 ```
 
 ### **Game Over state**
@@ -204,21 +234,30 @@ m_GameOverMessage.text="Game Over!\n\nYou traveled through "+ m_CurrentLevel+" l
 ```csharp
 using UnityEngine;
 using UnityEngine.InputSystem;
-public class PlayerController:MonoBehaviour
+
+public class PlayerController : MonoBehaviour
 {
-privatebool m_IsGameOver;
-...
-publicvoidGameOver()
-{   
-m_IsGameOver=true;
+    private bool m_IsGameOver;
+    ...
+    
+    public void GameOver()
+    {   
+        m_IsGameOver = true;
+    }
+
+    ...
+    
+    private void Update()
+    {
+        if (m_IsGameOver)
+        {
+            return;
+        }
+
+        ...
+    }
 }
-...
-private void Update()
-{
-if(m_IsGameOver)
-{
-return;
-}...}
+
 ```
 
 ### **GameManager**
@@ -226,15 +265,18 @@ return;
 ```csharp
 public void ChangeFood(int amount) 
 {     
-m_FoodAmount+= amount;     
-m_FoodLabel.text="Food : "+ m_FoodAmount;
-if(m_FoodAmount<=0)
-{         
-PlayerController.GameOver();         
-m_GameOverPanel.style.visibility= Visibility.Visible;         
-m_GameOverMessage.text="Game Over!\n\nSurvived "+ m_CurrentLevel+" days";
+    m_FoodAmount += amount;     
+    m_FoodLabel.text = "Food : " + m_FoodAmount;
+
+    if (m_FoodAmount <= 0)
+    {         
+        PlayerController.GameOver();         
+        m_GameOverPanel.style.visibility = Visibility.Visible;         
+        m_GameOverMessage.text = 
+            "Game Over!\n\nSurvived " + m_CurrentLevel + " days";
+    }
 }
-}
+
 ```
 
 1. Move the part of the **Start** function in the **GameManager** that handles initializing the game into a new function called **StartNewGame**.
@@ -248,24 +290,31 @@ Things like getting references to UI elements or creating new objects like the 
 ```csharp
 void Start()
 {   
-TurnManager=newTurnManager();   
-TurnManager.OnTick+= OnTurnHappen;
-   m_FoodLabel= UIDoc.rootVisualElement.Q<Label>("FoodLabel");
-   m_GameOverPanel= UIDoc.rootVisualElement.Q<VisualElement>("GameOverPanel");   
-   m_GameOverMessage= m_GameOverPanel.Q<Label>("GameOverMessage");
-Start NewGame();
+    TurnManager = new TurnManager();
+    TurnManager.OnTick += OnTurnHappen;
+
+    m_FoodLabel = UIDoc.rootVisualElement.Q<Label>("FoodLabel");
+    m_GameOverPanel = UIDoc.rootVisualElement.Q<VisualElement>("GameOverPanel");
+    m_GameOverMessage = m_GameOverPanel.Q<Label>("GameOverMessage");
+
+    StartNewGame();
 }
-public void Start NewGame()
+
+public void StartNewGame()
 {   
-m_GameOverPanel.style.visibility= Visibility.Hidden;
-   m_CurrentLevel=1;   
-   m_FoodAmount=20;   
-   m_FoodLabel.text="Food : "+ m_FoodAmount;
-  BoardManager.Clean();   
-  BoardManager.Init();
-   PlayerController.Init();   
-   PlayerController.Spawn(BoardManager,newVector2Int(1,1));
-   } 
+    m_GameOverPanel.style.visibility = Visibility.Hidden;
+
+    m_CurrentLevel = 1;
+    m_FoodAmount = 20;
+    m_FoodLabel.text = "Food : " + m_FoodAmount;
+
+    BoardManager.Clean();
+    BoardManager.Init();
+
+    PlayerController.Init();
+    PlayerController.Spawn(BoardManager, new Vector2Int(1, 1));
+}
+
 ```
 
 - Hiding the GameOver message.
@@ -279,17 +328,20 @@ m_GameOverPanel.style.visibility= Visibility.Hidden;
 ```csharp
 public void Init()
 {   
-m_IsGameOver=false;
+    m_IsGameOver = false;
 }
+
 private void Update()
 {
-if(m_IsGameOver)
-{
-if(Keyboard.current.enterKey.wasPressedThisFrame)
-{           
-GameManager.Instance.StartNewGame();
+    if (m_IsGameOver)
+    {
+        if (Keyboard.current.enterKey.wasPressedThisFrame)
+        {           
+            GameManager.Instance.StartNewGame();
+        }
+        return;
+    }
+
+    ...
 }
-return;
-}
-...}
 ```

@@ -41,15 +41,15 @@ Now that you have your ground tiles, let’s write the code that creates the boa
 
 You’ll need to create the following three variables that you can set in the Editor:
 
-- The width (in number of tiles) of our level.
-- The height (in number of tiles) of our level.
-- An array of tiles that are going to be used for the board.
+* The width (in number of tiles) of our level.
+* The height (in number of tiles) of our level.
+* An array of tiles that are going to be used for the board.
 
 First, in the **Start** method, you need to get the Tilemap component from the child GameObjects of the GameObject the script is on (the **Tilemap** GameObejct is a child GameObject of the **BoardManager** GameObject) and store it in a private member variable for easy access later. Then the code needs to go over all the tiles in the Tilemap component and randomly select a ground tile.
 
-The method to set a tile from a tilemap is **SetTile**, which takes as first parameter a Vector3 Int with the coordinates of the tile (so (0,0,0) is the first cell, (1,0,0) the one on its right, (0,-1, 0) the one below etc. z is always 0 in this case as you work in 2D) and the second parameter is the actual tile to be set at that position.
+The method to set a tile from a tilemap is **SetTile**, which takes as first parameter a Vector3 Int with the coordinates of the tile (so (0, 0, 0) is the first cell, (1, 0, 0) the one on its right, (0, -1, 0) the one below etc. z is always 0 in this case as you work in 2D) and the second parameter is the actual tile to be set at that position.
 
-**Note**: Don’t forget to add the **using UnityEngine.Tilemaps** namespace at the beginning of your file so you can have access to the Tilemap and Tile classes.
+**Note**: Don’t forget to add the **using UnityEngine. Tilemaps** namespace at the beginning of your file so you can have access to the Tilemap and Tile classes.
 
 Here is the solution:
 
@@ -95,34 +95,34 @@ You can now see the game board in both the **Scene** view and the **Game** v
 Note that the **Game** view will only show part of the board, but you will fix the camera later!
 
 ```csharp
-voidStart()
-{       
-
-m_Tilemap=GetComponentInChildren<Tilemap>();
-
-for(int y=0; y< Height;++y)
+void Start()
 {
-for(int x=0; x< Width;++x)
-{
-Tile tile;
-if(x==0|| y==0|| x== Width-1|| y== Height-1)
-{                   
-tile= WallTiles[Random.Range(0, WallTiles.Length)];
-}
-else
-{                   
-tile= GroundTiles[Random.Range(0, GroundTiles.Length)];
-}
-m_Tilemap.SetTile(newVector3Int(x, y,0), tile);
-}
-}
-}
+    m_Tilemap = GetComponentInChildren<Tilemap>();
+
+    for (int y = 0; y < Height; ++y)
+    {
+        for (int x = 0; x < Width; ++x)
+        {
+            Tile tile;
+
+            if (x == 0 || y == 0 || x == Width - 1 || y == Height - 1)
+            {
+                tile = WallTiles[Random.Range(0, WallTiles.Length)];
+            }
+            else
+            {
+                tile = GroundTiles[Random.Range(0, GroundTiles.Length)];
+            }
+
+            m_Tilemap.SetTile(new Vector3Int(x, y, 0), tile);
+        }
+    }
 }
 ```
 
 ## 2.3 Camera
 
-As your tilemap is at **0**,**0**,**0**, and it is **8** by **8**, its center is at (**4**,**4**,**0**) so set the **Main Camera Position** to (**4**,**4**,**-10**) so it aims at the center of your board.
+As your tilemap is at **0**, **0**, **0**, and it is **8** by **8**, its center is at (**4**, **4**, **0**) so set the **Main Camera Position** to (**4**, **4**, **-10**) so it aims at the center of your board.
 
 Now, when you try to enter Play mode, your board will look something like this:
 
@@ -130,50 +130,55 @@ Now, when you try to enter Play mode, your board will look something like this:
 
 ## 2.4 Board Data
 
-- As of now, your board is only a collection of tiles, which are just visual. For the game to really function, you'll need to keep more data for each cell than just its sprites.
-- To do this, you'll use a 2D array, which is an array that has two indices (in this case, the x and y of the cell). This array type will be a custom C# class, which will allow you to store any kind of data per cell.
-- At the top of your **BoardManager** class, add a new class called “CellData” and make its first member variable a boolean that defines if the cell is passable or not. And then let’s declare a private property that is our 2D array board data that we will name **m_BoardData**.
+* As of now, your board is only a collection of tiles, which are just visual. For the game to really function, you'll need to keep more data for each cell than just its sprites.
+* To do this, you'll use a 2D array, which is an array that has two indices (in this case, the x and y of the cell). This array type will be a custom C# class, which will allow you to store any kind of data per cell.
+* At the top of your **BoardManager** class, add a new class called “CellData” and make its first member variable a boolean that defines if the cell is passable or not. And then let’s declare a private property that is our 2D array board data that we will name **m_BoardData**.
 
 ```csharp
-public class BoardManager:MonoBehaviour
+public class BoardManager : MonoBehaviour
 {
-public class CellData
-{
-public bool Passable;
-}
-privateCellData[,] m_BoardData;
+    public class CellData
+    {
+        public bool Passable;
+    }
+
+    private CellData[,] m_BoardData;
 }
 ```
 
-- **CellData[,]** is the way to declare a 2D array containing objects of type **CellData**. The “,” denotes there will be two indices to access it. So **m_BoardData[0,0]** is the first item of the first line, **m_BoardData[1,3]** the fourth item of the second line (indices start at 0!), etc.
-- In C# you can create an array of any dimension, so **CellData[,,]** would be a 3D array (three indices)
-- Finally you can update your **Start** method. To do this, you’ll need to do the following:
+* **CellData[, ]** is the way to declare a 2D array containing objects of type **CellData**. The “, ” denotes there will be two indices to access it. So **m_BoardData[0, 0]** is the first item of the first line,  **m_BoardData[1, 3]** the fourth item of the second line (indices start at 0!), etc.
+* In C# you can create an array of any dimension, so **CellData[, , ]** would be a 3D array (three indices)
+* Finally you can update your **Start** method. To do this, you’ll need to do the following:
     - Initialize the m_BoardData array with your board width/height so it’s size is enough to store the data of all the cells.
     - Create each CellData inside your loops and set its Passable value to **true** if the cell is not a border and **false** if it is a border.
 
 ```csharp
-voidStart()
-{    
-m_Tilemap=GetComponentInChildren<Tilemap>();
-m_BoardData=newCellData[Width, Height];
-for(int y=0; y< Height;++y)
+void Start()
 {
-for(int x=0; x< Width;++x)
-{
-Tile tile;            
-m_BoardData[x, y]=newCellData();
-if(x==0|| y==0|| x== Width-1|| y== Height-1)
-{                
-tile= WallTiles[Random.Range(0, WallTiles.Length)];                
-m_BoardData[x, y].Passable=false;
+    m_Tilemap = GetComponentInChildren<Tilemap>();
+    m_BoardData = new CellData[Width, Height];
+
+    for (int y = 0; y < Height; ++y)
+    {
+        for (int x = 0; x < Width; ++x)
+        {
+            Tile tile;
+            m_BoardData[x, y] = new CellData();
+
+            if (x == 0 || y == 0 || x == Width - 1 || y == Height - 1)
+            {
+                tile = WallTiles[Random.Range(0, WallTiles.Length)];
+                m_BoardData[x, y].Passable = false;
+            }
+            else
+            {
+                tile = GroundTiles[Random.Range(0, GroundTiles.Length)];
+                m_BoardData[x, y].Passable = true;
+            }
+
+            m_Tilemap.SetTile(new Vector3Int(x, y, 0), tile);
+        }
+    }
 }
-else
-{                
-tile= GroundTiles[Random.Range(0, GroundTiles.Length)];                
-m_BoardData[x, y].Passable=true;
-}
-m_Tilemap.SetTile(newVector3Int(x, y,0), tile);
-}
-}
-}
+
 ```
