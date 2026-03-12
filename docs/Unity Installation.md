@@ -10,11 +10,11 @@ https://docs.unity3d.com/6000.3/Documentation/Manual/system-requirements.html
 3. Create your account and choose any valid License from what unity will provide you wtih
 
 3. When inside go to installs tab:
-![alt text](<Screenshot 2026-03-12 182946.png>) 
+![images](<Screenshot 2026-03-12 182946.png>) 
 
 4. Then on the top right click on install editor
-![alt text](<Screenshot 2026-03-12 182954.png>)
+![images](<Screenshot 2026-03-12 182954.png>)
 
 5. When you click on install editor the below window will open up , keep in mind to install only from the "official release" tab as those work best.
 
-![alt text](<Screenshot 2026-03-12 183137.png>)
+![images](<Screenshot 2026-03-12 183137.png>)

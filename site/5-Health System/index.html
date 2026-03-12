@@ -1,0 +1,1464 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../4-Turn%20System/">
+      
+      
+        <link rel="next" href="../6-Adding%20Obstacles/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../images/favicon.ico">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.3">
+    
+    
+      
+        <title>Health System - GAME DEV WORKSHOP DOCS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="pink">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#5-adding-a-health-system" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="GAME DEV WORKSHOP DOCS" class="md-header__button md-logo" aria-label="GAME DEV WORKSHOP DOCS" data-md-component="logo">
+      
+  <img src="../images/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            GAME DEV WORKSHOP DOCS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Health System
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="pink"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="pink"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../Content%20Page/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Content
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../Unity%20Installation/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Unity installation
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../1-Introduction/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Introduction
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../2-Creating%20the%20Game/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Creating the Game
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../3-Character%20Development/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Character Development
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../4-Turn%20System/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Turn System
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Health System
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../6-Adding%20Obstacles/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Adding Obstacles
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../7-Beating%20the%20game/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Beating the Game
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../8-Animation/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Animation
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../9-Adding%20an%20enemy/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Adding an Enemy
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../10-Conclusion/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Conclusion
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="GAME DEV WORKSHOP DOCS" class="md-nav__button md-logo" aria-label="GAME DEV WORKSHOP DOCS" data-md-component="logo">
+      
+  <img src="../images/logo.png" alt="logo">
+
+    </a>
+    GAME DEV WORKSHOP DOCS
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Content%20Page/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Content
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Unity%20Installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Unity installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1-Introduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2-Creating%20the%20Game/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Creating the Game
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3-Character%20Development/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Character Development
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4-Turn%20System/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Turn System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Health System
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Health System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#51-add-a-food-resource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Add a Food resource
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#52-ui-designing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 UI Designing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#53-updating-the-label-using-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Updating the Label Using Code
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#54-objects-in-cell-and-food-refill" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 Objects in cell and food refill
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#55-collect-food" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5 Collect food
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6-Adding%20Obstacles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adding Obstacles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../7-Beating%20the%20game/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Beating the Game
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../8-Animation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Animation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../9-Adding%20an%20enemy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adding an Enemy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10-Conclusion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conclusion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="5-adding-a-health-system">5. Adding a Health System<a class="headerlink" href="#5-adding-a-health-system" title="Permanent link">&para;</a></h1>
+<h2 id="51-add-a-food-resource">5.1 Add a Food resource<a class="headerlink" href="#51-add-a-food-resource" title="Permanent link">&para;</a></h2>
+<ul>
+<li>The problem is that right now there’s no way to know when a turn happens inside the <strong>GameManager</strong>. Getting notified when a turn happens is going to be an important function you will need many times in the game.</li>
+<li>To address this problem, you can implement a callback system. A <strong>callback system</strong> allows any part of the code to give a method that can be called when an event happens. In this case, when a turn happens, all registered components will get notified and the given methods will be called.</li>
+<li>Because this callback won’t have any parameters (it just needs to know if something happens or not), you can use <strong>System.Action</strong> as the type of the callback (it’s a built-in type in the C# standard library for callbacks).</li>
+<li>
+<p>Add the following to your <strong>TurnManager</strong> script after the first “{“:</p>
+<p><code>public event System.Action OnTick;</code></p>
+</li>
+<li>
+<p><strong>Note</strong>: <strong>event</strong> is a special C# keyword for callback. This means only the class in which <strong>OnTick</strong> is declared (in this case TurnManager) can trigger the event, nothing else.</p>
+</li>
+<li>
+<p>Add the following inside the <strong>Tick</strong> method:</p>
+<p><code>OnTick?.Invoke();</code></p>
+</li>
+<li>
+<p><strong>Invoke</strong> is the method in <strong>System.Action</strong> that will call (“invoke”) all the callback methods that were registered to the <strong>OnTick</strong> event.</p>
+</li>
+<li>The <strong>?</strong> is a special C# syntax used to test if <strong>OnTick</strong> is null. If it’s null, ? does nothing, but if it’s not null, ? will call the method on the right of the ?. It’s a shorthand version that does the same thing as:</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">OnTick</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">null</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">OnTick</span><span class="p">.</span><span class="n">Invoke</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li>You need to test if <strong>OnTick</strong> is null because if no other part of the code registered a callback function to <strong>OnTick</strong>, then it will be null, and trying to call <strong>Invoke</strong> on a null object will generate an error and break the game!</li>
+<li>Now other scripts can register to that callback to get notified when a tick happens. In your <strong>GameManager</strong>, do the following:<ul>
+<li>Add a private integer member that stores how much food you currently have (initialized at 100).</li>
+<li>Add a method called “OnTurnHappen” that will be called when a turn happens.</li>
+<li>Register the <strong>OnTurnHappen</strong> method to your <strong>TurnManager.OnTick</strong> callback.</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="k">private</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">m_FoodAmount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span>
+
+<span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Start</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">TurnManager</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">TurnManager</span><span class="p">();</span>
+<span class="w">    </span><span class="n">TurnManager</span><span class="p">.</span><span class="n">OnTick</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">OnTurnHappen</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">BoardManager</span><span class="p">.</span><span class="n">Init</span><span class="p">();</span>
+<span class="w">    </span><span class="n">PlayerController</span><span class="p">.</span><span class="n">Spawn</span><span class="p">(</span><span class="n">BoardManager</span><span class="p">,</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Vector2Int</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">OnTurnHappen</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">m_FoodAmount</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Debug</span><span class="p">.</span><span class="n">Log</span><span class="p">(</span><span class="s">&quot;Current amount of food: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">m_FoodAmount</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><strong>TurnManager.OnTick += OnTurnHappen</strong> is how you register a method callback to the <strong>OnTick</strong> event. When <strong>OnTick</strong> has its <strong>Invoke</strong> method called, it calls the <strong>OnTurnHappen</strong> method. <strong>+=</strong> is used because we add the method to all the other ones already registered (right now there is a single one, but later you’ll have more methods called when <strong>OnTick</strong> happens).</p>
+<h2 id="52-ui-designing">5.2 UI Designing<a class="headerlink" href="#52-ui-designing" title="Permanent link">&para;</a></h2>
+<p>To add UI elements to your game, follow these instructions:</p>
+<p><strong>1.</strong> Right-click in the <strong>Hierarchy</strong> window and select <strong>UI Toolkit</strong> &gt; <strong>UI Document</strong>.</p>
+<p>This will create a new GameObject with a <strong>UI Document</strong> component attached to it. It will also create all the default settings for the UI Toolkit in your project.</p>
+<p>The UI toolkit works by decoupling the structure, look, and behavior of the UI in the following ways:</p>
+<ul>
+<li>The structure is given by a UXML file (that is similar to an HTML file) that defines which elements your UI is made of and their hierarchical relationship.</li>
+<li>The look is defined by a USS file (similar to a CSS file) that defines visual properties (colors, borders, spacing, alignment, etc.) of your UI element.</li>
+<li>The behavior is coded in C# by retrieving elements by their name or id and applying listeners or other behavior on them.</li>
+</ul>
+<p>Right now, the UI document component expects a Visual Tree Asset as its source. A <strong>Visual Tree Asset</strong> is a UXML file that defines your UI’s structure.</p>
+<p><strong>2.</strong> In the <strong>Project</strong> window, right-click the <strong>Assets</strong> folder and select <strong>Create</strong> &gt; <strong>Folder</strong> and name it “UI”.</p>
+<p><strong>3.</strong> Right-click the <strong>UI</strong> folder and select <strong>Create</strong> &gt; <strong>UI Toolkit</strong> &gt; <strong>UI Document</strong> and name it “GameUI”.</p>
+<p><strong>4.</strong> In the <strong>Hierarchy</strong> window, select the <strong>UIDocument</strong> GameObject, then in the <strong>Inspector</strong> window select the <strong>Source Asset</strong> picker (⊙) and select the <strong>GameUI</strong> document.</p>
+<p><strong>5.</strong> Double click the <strong>GameUI</strong> document.</p>
+<ul>
+<li>This will open the <strong>UI Builder</strong> window. Double click the window name to expand the window.</li>
+</ul>
+<p><img alt="" src="https://connect-mediagw.unity.com/h1/20240927/learn/images/048578fd-d7e6-4dc8-b4c9-fdb795ea5847_ui-builder-window.png" /></p>
+<ul>
+<li>The <strong>UI Builder</strong> window is a visual tool that lets you edit UXML files (like your <strong>GameUI</strong> document) visually instead of through text.</li>
+<li>The upper-left panel contains the <strong>Hierarchy</strong> window of your UI, which at the moment only contains the GameUI.uxml file. Below the <strong>Hierarchy</strong> window there is the <strong>Library</strong> window that contains all kinds of UI controls you can add to your UI.</li>
+<li>The central <strong>Viewpoint</strong> window consists of the view of your UI, which is currently empty.</li>
+<li>The rightmost window is the <strong>Inspector</strong> window, which displays all the properties of a selected UI element.</li>
+</ul>
+<p><strong>6.</strong> In the <strong>Library</strong> window, under the <strong>Controls</strong> section, drag and drop the <strong>Label</strong> element into the <strong>Viewport</strong> window.</p>
+<p><img alt="" src="https://connect-mediagw.unity.com/h1/20240927/learn/images/cb13e86d-57a0-42c4-9bfb-c97caef020aa_drag-label-to-panel.png" /></p>
+<p><strong>7.</strong> With <strong>Label</strong> selected in the <strong>Hierarchy</strong> window, select the <strong>Label</strong> box in the <strong>Inspector</strong> window and rename it “FoodLabel”.</p>
+<p><img alt="" src="https://connect-mediagw.unity.com/h1/20240927/learn/images/bfec1791-875f-415e-8369-6637cb16ae74_inspetor-label-window.png" /></p>
+<p><strong>8.</strong> With the <strong>Label</strong> selected in the <strong>Hierarchy</strong> window, in the <strong>Inspector</strong> window, use the foldout (triangle) to expand the <strong>Text</strong> section.</p>
+<p><strong>9.</strong> Select the <strong>Font</strong> property picker (⊙) and assign either the provided PressStart2P-Regular font or your own.</p>
+<p><strong>10.</strong> Select the <strong>Color</strong> property box and set the color to white (<strong>FFFFFF</strong>) so the <strong>Label</strong> will stand out on the black background.</p>
+<p><img alt="" src="https://unity-connect-prd.storage.googleapis.com/20250825/learn/images/a5a2290e-884a-48a7-a2a3-ea4e86d9482c_Untitled_54.png" /></p>
+<p>The <strong>Label</strong> font should have changed in the <strong>Viewport</strong> window.</p>
+<p><img alt="" src="https://connect-mediagw.unity.com/h1/20240927/learn/images/1d1119ae-b67f-4286-b34d-6d52b16e5efb_label-top-left.png" /></p>
+<p><strong>11.</strong> Change the <strong>Size</strong> property and make it bigger or smaller according to your own preferences (experiment with different sizes until you find one you like), and finally center the text using the <strong>Align</strong> property.</p>
+<p><img alt="" src="https://connect-mediagw.unity.com/h1/20240927/learn/images/f37b70da-9e9b-44e2-886d-1953964a4291_size-allign-properties.png" /></p>
+<p>Finally, let’s put the label at the bottom of the screen. Right now the UI toolkit uses automatic layout. The default layout organizes consecutive elements in the <strong>Hierarchy</strong> window from top to bottom, stretching across the width of the UI document.</p>
+<p>Instead, use manual positioning to place the <strong>Label</strong> exactly where you want.</p>
+<p><strong>12.</strong> Use the foldout (triangle) to expand the <strong>Position</strong> section in the <strong>Inspector</strong> window.</p>
+<p><strong>13.</strong> Open the <strong>Position Mode</strong> property dropdown and change the <strong>Position Mode</strong> from <strong>Relative</strong> to <strong>Absolute</strong>.</p>
+<p>In <strong>Absolute</strong> mode, the four offsets (Top/Right/Bottom/Left) are the distance to each border of the screen.</p>
+<p><strong>14.</strong> Set the <strong>Bottom</strong> offset to <strong>0</strong>.</p>
+<p><img alt="" src="https://connect-mediagw.unity.com/h1/20240927/learn/images/bb76cdd3-82ee-44fe-9a03-cf83fd333520_label-botton-left.png" /></p>
+<p><strong>15.</strong> Set both the <strong>Left</strong> and <strong>Right</strong> offsets to <strong>0</strong>.</p>
+<p><img alt="" src="https://connect-mediagw.unity.com/h1/20240927/learn/images/c8a4a583-899c-4fcd-a6a5-9546c6a3030d_label-justified.png" /></p>
+<p><img alt="" src="https://connect-mediagw.unity.com/h1/20240927/learn/images/833af6ad-198f-4a85-a821-831fe26bc972_save-button.png" /></p>
+<p><strong>16.</strong> In the Editor, enter Play mode to check how your changes look in game.</p>
+<p><img alt="" src="https://unity-connect-prd.storage.googleapis.com/20250825/learn/images/5ffe6a20-0a9f-4bc1-9acc-754c2107cb34_Untitled_55.png" /></p>
+<p><img alt="" src="https://connect-mediagw.unity.com/h1/20240927/learn/images/7f75086d-79a1-41d4-ad20-fc8532ebf5a6_maximize-wndow-button.png" /></p>
+<h2 id="53-updating-the-label-using-code">5.3 Updating the Label Using Code<a class="headerlink" href="#53-updating-the-label-using-code" title="Permanent link">&para;</a></h2>
+<p>To do this, you’ll use the <strong>GameManager</strong>:</p>
+<p><strong>1.</strong> Add a <strong>public</strong> variable of type <strong>UIDocument</strong> to your <strong>GameManager</strong> script. You also need to add <strong>using</strong> <strong>UnityEngine.UIElements</strong> at the top of the file to be able to use the classes related to UI Toolkit like UIDocument.</p>
+<p><strong>2.</strong> Create a <strong>private</strong> variable of type <strong>Label</strong> to store a reference to the Label so you can access and modify it.</p>
+<p>You can now assign your UI Document (the component on the <strong>UIDocument</strong> GameObject, not the Game UI file) to your GameManager in the <strong>Inspector</strong> window.</p>
+<p>You can then add the code that finds the Label inside your GameUI and update its text to the Food count in the <strong>GameManager</strong> <strong>Start</strong> method:</p>
+<div class="highlight"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">UnityEngine</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">UnityEngine.UIElements</span><span class="p">;</span>
+
+<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">GameManager</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">MonoBehaviour</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">UIDocument</span><span class="w"> </span><span class="n">UIDoc</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="n">Label</span><span class="w"> </span><span class="n">m_FoodLabel</span><span class="p">;</span>
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">m_FoodAmount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Start</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">m_FoodLabel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">UIDoc</span><span class="p">.</span><span class="n">rootVisualElement</span><span class="p">.</span><span class="n">Q</span><span class="o">&lt;</span><span class="n">Label</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;FoodLabel&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">m_FoodLabel</span><span class="p">.</span><span class="n">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Food : &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">m_FoodAmount</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li><strong>UIDocument</strong> has a .<strong>rootVisualElement</strong> property that is the root (the first element) of the <strong>Hierarchy</strong> window you saw in the <strong>UIBuilder</strong> window earlier. All elements in the <strong>Hierarchy</strong> window (like the label) are child elements of that root element..</li>
+<li>This root (and any element of the UIToolkit) has a special method, <strong>Q</strong>, short for <strong>Query</strong>. This <strong>Q</strong> method looks for an element of the given type (for example, <strong>Label</strong>) with the given name (for example, <strong>FoodLabel</strong>) in the child elements of the element on which you call Q.</li>
+<li><strong>m_FoodLabel</strong> is an additional private variable of type Label to add to your <strong>GameManager</strong> so you can store the <strong>Label</strong> and not have to look for it everytime with the <strong>Q</strong> method.</li>
+<li>The <strong>.text</strong> property is used to set the text of the label to display the current amount of food (for example, Food:100).</li>
+</ul>
+<p>You should now have your food count at the bottom of your screen.</p>
+<p><img alt="" src="https://connect-mediagw.unity.com/h1/20240927/learn/images/16014662-233b-4075-a796-b3aa51afa0b6_game-view-food-counter.png" /></p>
+<p>However, you’ll notice that the counter doesn’t update when the player character moves. For this, you have to replace the <strong>Debug.Log</strong> you wrote earlier in the <strong>OnTurnHappen</strong> method with the following:</p>
+<div class="highlight"><pre><span></span><code><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">OnTurnHappen</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">m_FoodAmount</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="n">m_FoodLabel</span><span class="p">.</span><span class="n">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Food : &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">m_FoodAmount</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Now, if you enter Play mode and move around, the food counter will decrease</p>
+<h2 id="54-objects-in-cell-and-food-refill">5.4 <strong>Objects in cell and food refill</strong><a class="headerlink" href="#54-objects-in-cell-and-food-refill" title="Permanent link">&para;</a></h2>
+<p>Collider and Rigidbody components are used to detect collisions and overlapping of objects. But in this case, because the game is turn based and happens on a grid, you don’t need to use physics.</p>
+<p>You already have <strong>CellData</strong> for each cell in the game, and you use it to store whether the cell is passable or not. Now, you’ll add a new value to that <strong>CellData</strong> that stores whether the cell contains an object or not:</p>
+<p><strong>1.</strong> Open your <strong>BoardManager</strong> script and inside the <strong>CellData</strong> class add the following new variable:</p>
+<div class="highlight"><pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">CellData</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">Passable</span><span class="p">;</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">GameObject</span><span class="w"> </span><span class="n">ContainedObject</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><strong>2.</strong> Drag your preferred food sprite into the scene to create a new GameObject with that sprite, name it “SmallFood”, set its <strong>order in layer</strong> to something between <strong>1</strong> and <strong>9</strong>.</p>
+<p><strong>3.</strong> In the <strong>Project</strong> window, right-click the <strong>Assets</strong> folder and select <strong>Create</strong> &gt; <strong>Folder,</strong> new it “Prefabs”<strong>,</strong> then drag and drop your <strong>SmallFood</strong>GameObject from the <strong>Hierarchy</strong> window into the new <strong>Prefabs</strong> folder.</p>
+<p>This will create a prefab from that GameObject that you can reuse multiple times and between scenes.</p>
+<p><strong>4.</strong> Delete the <strong>SmallFood</strong>GameObject from the scene.</p>
+<p><strong>5.</strong> In <strong>BoardManager</strong>, add a public variable <strong>FoodPrefab</strong> of type <strong>GameObject</strong>, to store the prefab of the food you just created.</p>
+<div class="highlight"><pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="n">GameObject</span><span class="w"> </span><span class="n">FoodPrefab</span><span class="p">;</span>
+</code></pre></div>
+<p><strong>6.</strong> Write a new void method named “GenerateFood”, then copy and paste the following code into that method:</p>
+<div class="highlight"><pre><span></span><code><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">GenerateFood</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">foodCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">foodCount</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">randomX</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Random</span><span class="p">.</span><span class="n">Range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">Width</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">randomY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Random</span><span class="p">.</span><span class="n">Range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">Height</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">CellData</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_BoardData</span><span class="p">[</span><span class="n">randomX</span><span class="p">,</span><span class="w"> </span><span class="n">randomY</span><span class="p">];</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">Passable</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">data</span><span class="p">.</span><span class="n">ContainedObject</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">null</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">GameObject</span><span class="w"> </span><span class="n">newFood</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Instantiate</span><span class="p">(</span><span class="n">FoodPrefab</span><span class="p">);</span>
+<span class="w">            </span><span class="n">newFood</span><span class="p">.</span><span class="n">transform</span><span class="p">.</span><span class="n">position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CellToWorld</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">Vector2Int</span><span class="p">(</span><span class="n">randomX</span><span class="p">,</span><span class="w"> </span><span class="n">randomY</span><span class="p">));</span>
+<span class="w">            </span><span class="n">data</span><span class="p">.</span><span class="n">ContainedObject</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newFood</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li>Creates an <strong>int</strong> variable that stores how many food prefabs will be created (making a variable allows you to easily change it to test different values)</li>
+<li>Loops this number of times:<ul>
+<li>On each loop, a random x and y position are picked. <strong>Random.Range</strong> returns a number contained between the first parameter (included) and the second (excluded). Note that the range is 1 to size - 2 (as size -1 is excluded) because the code shouldn’t pick a cell that is an outside wall!</li>
+<li>It then retrieves the <strong>CellData</strong> for that cell position.</li>
+<li>If this cell is passable and there is no object there, it instantiates a new food prefab in that position and stores that food as the <strong>ContainedObject</strong> in that cell in its <strong>CellData</strong>.</li>
+</ul>
+</li>
+</ul>
+<p><strong>7.</strong> Call this new method at the end of the <strong>Init</strong> method of the <strong>BoardManager</strong>, once the level has been created.</p>
+<div class="highlight"><pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Init</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">m_Tilemap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GetComponentInChildren</span><span class="o">&lt;</span><span class="n">Tilemap</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="w">    </span><span class="n">m_Grid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GetComponentInChildren</span><span class="o">&lt;</span><span class="n">Grid</span><span class="o">&gt;</span><span class="p">();</span>
+
+<span class="w">    </span><span class="n">m_BoardData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">CellData</span><span class="p">[</span><span class="n">Width</span><span class="p">,</span><span class="w"> </span><span class="n">Height</span><span class="p">];</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">Height</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">y</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">Width</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">x</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Tile</span><span class="w"> </span><span class="n">tile</span><span class="p">;</span>
+<span class="w">            </span><span class="n">m_BoardData</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">CellData</span><span class="p">();</span>
+
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">Width</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">Height</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="n">tile</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">WallTiles</span><span class="p">[</span><span class="n">Random</span><span class="p">.</span><span class="n">Range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">WallTiles</span><span class="p">.</span><span class="n">Length</span><span class="p">)];</span>
+<span class="w">                </span><span class="n">m_BoardData</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">].</span><span class="n">Passable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">else</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="n">tile</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GroundTiles</span><span class="p">[</span><span class="n">Random</span><span class="p">.</span><span class="n">Range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">GroundTiles</span><span class="p">.</span><span class="n">Length</span><span class="p">)];</span>
+<span class="w">                </span><span class="n">m_BoardData</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">].</span><span class="n">Passable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+
+<span class="w">            </span><span class="n">m_Tilemap</span><span class="p">.</span><span class="n">SetTile</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">Vector3Int</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">),</span><span class="w"> </span><span class="n">tile</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">GenerateFood</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><strong>8.</strong> Save your changes to the scripts, assign your SmallFood prefab to the <strong>FoodPrefab</strong> slot on the <strong>BoardManager</strong> in the <strong>Inspector</strong> window, and then enter Play mode to check if food appears on your map.</p>
+<p><strong>9.</strong> Add a new variable called “m_EmptyCellsList” of type <strong>List</strong> containing <strong>Vector2Int</strong> in the <strong>BoardManager</strong> script. You’ll need to add <strong>using</strong> <strong>System.Collections.Generic</strong> at the top of your file to be able to use <strong>List:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Init</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">m_Tilemap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GetComponentInChildren</span><span class="o">&lt;</span><span class="n">Tilemap</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="w">    </span><span class="n">m_Grid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GetComponentInChildren</span><span class="o">&lt;</span><span class="n">Grid</span><span class="o">&gt;</span><span class="p">();</span>
+
+<span class="w">    </span><span class="c1">// Initialize the list</span>
+<span class="w">    </span><span class="n">m_EmptyCellsList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Vector2Int</span><span class="o">&gt;</span><span class="p">();</span>
+
+<span class="w">    </span><span class="n">m_BoardData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">CellData</span><span class="p">[</span><span class="n">Width</span><span class="p">,</span><span class="w"> </span><span class="n">Height</span><span class="p">];</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">Height</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">y</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">Width</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">x</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Tile</span><span class="w"> </span><span class="n">tile</span><span class="p">;</span>
+<span class="w">            </span><span class="n">m_BoardData</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">CellData</span><span class="p">();</span>
+
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">Width</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">Height</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="n">tile</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">WallTiles</span><span class="p">[</span><span class="n">Random</span><span class="p">.</span><span class="n">Range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">WallTiles</span><span class="p">.</span><span class="n">Length</span><span class="p">)];</span>
+<span class="w">                </span><span class="n">m_BoardData</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">].</span><span class="n">Passable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">else</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="p">...</span><span class="n">m_EmptyCellsList</span><span class="p">.</span><span class="n">Remove</span><span class="p">(</span><span class="n">newVector2Int</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">));</span><span class="n">GenerateFood</span><span class="p">();</span>
+</code></pre></div>
+<p>You can replace picking a random coordinate in the <strong>GenerateFood</strong> method with an entry from the <strong>m_EmtpyCellsList</strong> list, and then remove that entry from the <strong>m_EmtpyCellsList</strong> list (because the cell is no longer empty).</p>
+<p>This is the final version of GenerateFood using the empty cell list :</p>
+<div class="highlight"><pre><span></span><code><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">GenerateFood</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">foodCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">foodCount</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">randomIndex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Random</span><span class="p">.</span><span class="n">Range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">m_EmptyCellsList</span><span class="p">.</span><span class="n">Count</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Vector2Int</span><span class="w"> </span><span class="n">coord</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_EmptyCellsList</span><span class="p">[</span><span class="n">randomIndex</span><span class="p">];</span>
+
+<span class="w">        </span><span class="n">m_EmptyCellsList</span><span class="p">.</span><span class="n">RemoveAt</span><span class="p">(</span><span class="n">randomIndex</span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">CellData</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_BoardData</span><span class="p">[</span><span class="n">coord</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">coord</span><span class="p">.</span><span class="n">y</span><span class="p">];</span>
+
+<span class="w">        </span><span class="n">GameObject</span><span class="w"> </span><span class="n">newFood</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Instantiate</span><span class="p">(</span><span class="n">FoodPrefab</span><span class="p">);</span>
+<span class="w">        </span><span class="n">newFood</span><span class="p">.</span><span class="n">transform</span><span class="p">.</span><span class="n">position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CellToWorld</span><span class="p">(</span><span class="n">coord</span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">data</span><span class="p">.</span><span class="n">ContainedObject</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newFood</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="55-collect-food">5.5 <strong>Collect food</strong><a class="headerlink" href="#55-collect-food" title="Permanent link">&para;</a></h2>
+<p>A very basic way to do this would be to follow this structure:</p>
+<ul>
+<li>When entering a new cell, check if there is a <strong>ContainedObject</strong> in that cell’s <strong>CellData</strong>.</li>
+<li>If yes, increase the food counter of the player character by a certain amount.</li>
+</ul>
+<p>This works, and you can even test doing it this way if you feel up for the challenge. However, this approach is very limited. For example, what if you want different food objects to give different amounts of food points, or you want to make poisoned food that makes you lose food points?</p>
+<p>To do this, you need a way to make handling objects in a cell more generic, like a generic <strong>CellObject</strong> type that your CellData can contain and then act on that object when the player character interacts with a cell. That way you can easily write a new CellObject and the player code doesn’t have to be modified to handle every different type of object, even some you might not have thought about when designing this system.</p>
+<p>This will be solved through <strong>C# inheritance</strong>: a base class CellObject that different objects (<strong>FoodObject</strong>, for example) can inherit from.</p>
+<p>This base type will have a virtual method called <strong>PlayerEntered</strong> that will be called by the player code when the player character enters its cell. That way every subclass can handle what happens when the player character enters a cell (for example, food objects will destroy themselves and increase the food count by a certain amount).</p>
+<p>To add this functionality, follow these instructions:</p>
+<p><strong>1.</strong> In the <strong>Project</strong> window, under the <strong>Assets</strong> folder, right -lick the <strong>Scripts</strong> folder and select <strong>Create</strong> &gt; <strong>Scripting</strong> &gt; <strong>MonoBehaviour Script</strong>. Name it “CellObject” and add a virtual method called “PlayerEntered”.</p>
+<p>The <strong>PlayerEntered</strong> method will be empty in that base class because by default, cell objects do nothing when the player character enters their cell.</p>
+<div class="highlight"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">UnityEngine</span><span class="p">;</span>
+
+<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">CellObject</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">MonoBehaviour</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="c1">// Called when the player enters the cell containing this object</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">virtual</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">PlayerEntered</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><strong>2.</strong> In the <strong>Project</strong> window, under the <strong>Assets</strong> folder, right-click the <strong>Scripts</strong> folder and select <strong>Create</strong> &gt; <strong>Scripting</strong> &gt; <strong>MonoBehaviour Script</strong>, and name it “FoodObject”.</p>
+<p><strong>3.</strong> Change the class the <strong>FoodObject</strong> script inherits from <strong>MonoBehaviour</strong> to <strong>CellObject</strong>. You then need to redefine the <strong>PlayerEntered</strong> method so it does a different thing than the base class one. This is called <strong>overriding</strong> the method, and uses the override keyword.</p>
+<div class="highlight"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">UnityEngine</span><span class="p">;</span>
+
+<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">FoodObject</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">CellObject</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">PlayerEntered</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span><span class="w"> </span>
+<span class="w">        </span><span class="n">Destroy</span><span class="p">(</span><span class="n">gameObject</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// increase food</span>
+<span class="w">        </span><span class="n">Debug</span><span class="p">.</span><span class="n">Log</span><span class="p">(</span><span class="s">&quot;Food increased&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>For now, this will just destroy the <strong>FoodObject</strong> GameObject and write something in the console to show it happened. This is enough to test if the code works.</p>
+<p><strong>4.</strong> Replace the GameObject in <strong>CellData</strong> with a <strong>CellObject</strong> in the <strong>BoardManager</strong> script<strong>.</strong></p>
+<div class="highlight"><pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">CellData</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">Passable</span><span class="p">;</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">CellObject</span><span class="w"> </span><span class="n">ContainedObject</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>This will generate a couple of errors in your console you should be able to fix.The fixes are below, but see if you can figure them out for yourself before you look at the solutions!</p>
+<p>Here are the bug fixes:</p>
+<ul>
+<li>Change the <strong>FoodPrefab</strong> type from <strong>GameObject</strong> to <strong>FoodObject</strong> in the <strong>BoardManager script</strong>.</li>
+<li>In the <strong>GenerateFood</strong> method, because you now instantiate a FoodObject, change the <strong>newFood</strong> type from <strong>GameObject</strong> to <strong>FoodObject.</strong></li>
+</ul>
+<p><strong>5.</strong> In your <strong>PlayerController</strong> script, when the player enters a new cell, if it contains an object, call <strong>PlayerEntered</strong> on it:</p>
+<div class="highlight"><pre><span></span><code><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">hasMoved</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="c1">// check if the new position is passable, then move there if it is.</span>
+<span class="w">    </span><span class="n">BoardManager</span><span class="p">.</span><span class="n">CellData</span><span class="w"> </span><span class="n">cellData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_Board</span><span class="p">.</span><span class="n">GetCellData</span><span class="p">(</span><span class="n">newCellTarget</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">cellData</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">cellData</span><span class="p">.</span><span class="n">Passable</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">GameManager</span><span class="p">.</span><span class="n">Instance</span><span class="p">.</span><span class="n">TurnManager</span><span class="p">.</span><span class="n">Tick</span><span class="p">();</span>
+<span class="w">        </span><span class="n">MoveTo</span><span class="p">(</span><span class="n">newCellTarget</span><span class="p">);</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">cellData</span><span class="p">.</span><span class="n">ContainedObject</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">null</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">cellData</span><span class="p">.</span><span class="n">ContainedObject</span><span class="p">.</span><span class="n">PlayerEntered</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Virtual methods allow you to change the behavior of a method in a subclass. In this case, <strong>CellData</strong> keeps a reference to a <strong>CellObject</strong>, but this reference can point to an object of any subclass of <strong>CellObject</strong> (in this case, <strong>FoodObject</strong>). When you call <strong>PlayerEntered</strong>, the correct overridden method will be automatically called, based on the <strong>actual</strong> type of the stored object. In this case, because <strong>ContainedObject</strong> will actually point to a <strong>FoodObject</strong>, it is its <strong>PlayerEntered</strong> method that will be called, not the empty <strong>CellObject method</strong>.</p>
+<h1 id="56-increasing-the-food-count">5.6 <strong>Increasing the food count</strong><a class="headerlink" href="#56-increasing-the-food-count" title="Permanent link">&para;</a></h1>
+<p>So far, the console is only outputting when the player character collects a <strong>Food</strong> GameObject. However, you also need to actually modify the amount of food displayed on the label. This is stored in the <strong>GameManager</strong>, and you have access to it through the <strong>Singleton</strong> instance.</p>
+<ul>
+<li>Create a method in the <strong>GameManager</strong> script that changes the amount of food by a given parameter and name it something like “ChangeFood”. Don’t forget to also update the label when you do so!</li>
+<li>Add a public property on your <strong>FoodObject</strong> so you can define how many food points are given by the <strong>FoodObject</strong> when collected.</li>
+<li>Call the new <strong>GameManager</strong> method in the <strong>PlayerEntered</strong> method on your <strong>FoodObject</strong>.</li>
+</ul>
+<h3 id="in-gamemanager"><strong>In GameManager</strong><a class="headerlink" href="#in-gamemanager" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">void</span><span class="w"> </span><span class="nf">OnTurnHappen</span><span class="p">()</span><span class="w"> </span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">ChangeFood</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">ChangeFood</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">amount</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">m_FoodAmount</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">amount</span><span class="p">;</span>
+<span class="w">    </span><span class="n">m_FoodLabel</span><span class="p">.</span><span class="n">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Food : &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">m_FoodAmount</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="foodobject"><strong>FoodObject</strong><a class="headerlink" href="#foodobject" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">FoodObject</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">CellObject</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">AmountGranted</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">PlayerEntered</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Destroy</span><span class="p">(</span><span class="n">gameObject</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// increase food</span>
+<span class="w">        </span><span class="n">GameManager</span><span class="p">.</span><span class="n">Instance</span><span class="p">.</span><span class="n">ChangeFood</span><span class="p">(</span><span class="n">AmountGranted</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../4-Turn%20System/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Turn System">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Turn System
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../6-Adding%20Obstacles/" class="md-footer__link md-footer__link--next" aria-label="Next: Adding Obstacles">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Adding Obstacles
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/yourusername" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://twitter.com/yourusername" target="_blank" rel="noopener" title="twitter.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M459.4 151.7c.3 4.5.3 9.1.3 13.6 0 138.7-105.6 298.6-298.6 298.6-59.5 0-114.7-17.2-161.1-47.1 8.4 1 16.6 1.3 25.3 1.3 49.1 0 94.2-16.6 130.3-44.8-46.1-1-84.8-31.2-98.1-72.8 6.5 1 13 1.6 19.8 1.6 9.4 0 18.8-1.3 27.6-3.6-48.1-9.7-84.1-52-84.1-103v-1.3c14 7.8 30.2 12.7 47.4 13.3-28.3-18.8-46.8-51-46.8-87.4 0-19.5 5.2-37.4 14.3-53C87.4 130.8 165 172.4 252.1 176.9c-1.6-7.8-2.6-15.9-2.6-24C249.5 95.1 296.3 48 354.4 48c30.2 0 57.5 12.7 76.7 33.1 23.7-4.5 46.5-13.3 66.6-25.3-7.8 24.4-24.4 44.8-46.1 57.8 21.1-2.3 41.6-8.1 60.4-16.2-14.3 20.8-32.2 39.3-52.6 54.3"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.top", "navigation.footer", "navigation.sections", "search.highlight", "search.suggest", "toc.integrate"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -20,3 +20,9 @@
 .md-typeset p {
   margin-bottom: 0.7em;
 }
+html, body {
+  overflow-y: auto;
+}
+.md-main {
+  overflow-y: auto ;
+}
