@@ -73,6 +73,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#table-of-contents" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -521,6 +526,24 @@
       
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Content
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -537,6 +560,34 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TABLE OF CONTENTS:
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -858,81 +909,83 @@
 
   <h1>Content</h1>
 
-<p>TABLE OF CONTENTS:</p>
+<h3 id="table-of-contents">TABLE OF CONTENTS:<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h3>
 <ol>
-<li>Introduction </li>
-<li>1.1 What you will be learning ?</li>
-<li>1.2 Preparing for the project</li>
 <li>
-<p>1.3 Importing Assets</p>
+<p><strong>Introduction</strong></p>
+<ol>
+<li>What you will be learning </li>
+<li>Preparing for the project</li>
+<li>Importing Assets</li>
+</ol>
 </li>
 <li>
-<p>Creating the game</p>
-</li>
-<li>2.1 Creating the game board</li>
-<li>2.2 Scripting</li>
-<li>2.3 Camera</li>
-<li>2.4 Board Data </li>
-<li>
-<p>2.5 Player Character</p>
-</li>
-<li>
-<p>Character Development</p>
-</li>
-<li>3.1 Adding Player Character</li>
-<li>3.2 Moving Player Character</li>
-<li>
-<p>3.3 Refactoring</p>
+<p><strong>Creating the game</strong></p>
+<ol>
+<li>Creating the game board</li>
+<li>Scripting</li>
+<li>Camera</li>
+<li>Board Data </li>
+<li>Player Character</li>
+</ol>
 </li>
 <li>
-<p>Turn System</p>
-</li>
-<li>4.1 Turn Manager</li>
-<li>
-<p>4.2 Ticking Turn</p>
-</li>
-<li>
-<p>Adding a Health System</p>
-</li>
-<li>5.1 Add a Food resource</li>
-<li>5.2 UI Designing</li>
-<li>5.3 Updating the Label using Code</li>
-<li>5.4 Objects in cell and food refill</li>
-<li>5.5 Collecting Health</li>
-<li>
-<p>5.6 Increasing health count</p>
+<p><strong>Character Development</strong></p>
+<ol>
+<li>Adding Player Character </li>
+<li>Moving Player Character</li>
+<li>Refactoring</li>
+</ol>
 </li>
 <li>
-<p>Adding Obstacles</p>
-</li>
-<li>6.1 Add obstacles</li>
-<li>6.2 Refactoring</li>
-<li>
-<p>6.3 Damaging walls</p>
-</li>
-<li>
-<p>Beating the Game</p>
-</li>
-<li>7.1 Finishing a Level</li>
-<li>7.2 Generating a new level</li>
-<li>
-<p>7.3 Game Over</p>
+<p><strong>Turn System</strong></p>
+<ol>
+<li>Turn Manager</li>
+<li>Ticking Turn</li>
+</ol>
 </li>
 <li>
-<p>Animation</p>
-</li>
-<li>8.1 Idle Animation</li>
-<li>
-<p>8.2 Walking Animation</p>
-</li>
-<li>
-<p>Adding an enemy</p>
-</li>
-<li>
-<p>9.1 Creating an Enemy</p>
+<p><strong>Adding a Health System</strong></p>
+<ol>
+<li>Add a Food resource</li>
+<li>UI Designing</li>
+<li>Updating the Label using Code</li>
+<li>Objects in cell and food refill</li>
+<li>Collecting Health</li>
+<li>Increasing health count</li>
+</ol>
 </li>
 <li>
-<p>Conclusion</p>
+<p><strong>Adding Obstacles</strong></p>
+<ol>
+<li>Add obstacles</li>
+<li>Refactoring</li>
+<li>Damaging walls</li>
+</ol>
+</li>
+<li>
+<p><strong>Beating the Game</strong></p>
+<ol>
+<li>Finishing a Level</li>
+<li>Generating a new level</li>
+<li>Game Over</li>
+</ol>
+</li>
+<li>
+<p><strong>Animation</strong></p>
+<ol>
+<li>Idle Animation</li>
+<li>Walking Animation</li>
+</ol>
+</li>
+<li>
+<p><strong>Adding an enemy</strong></p>
+<ol>
+<li>Creating an Enemy</li>
+</ol>
+</li>
+<li>
+<p><strong>Conclusion</strong></p>
 </li>
 </ol>
 
@@ -1057,7 +1110,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.top", "navigation.footer", "navigation.sections", "search.highlight", "search.suggest", "toc.integrate"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.top", "navigation.expand", "navigation.sections", "navigation.footer", "navigation.sections", "search.highlight", "search.suggest", "toc.integrate"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
       <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>

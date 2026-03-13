@@ -7,12 +7,12 @@ https://docs.unity3d.com/6000.3/Documentation/Manual/system-requirements.html
 
 3.  When inside go to installs tab:
 
-![Screenshot 2026-03-12 182946.png](attachment:c9a911e9-43f4-487b-aecd-51d2ccc182fa:Screenshot_2026-03-12_182946.png)
+![images](images/c9a911e9-43f4-487b-aecd-51d2ccc182fa:Screenshot_2026-03-12_182946.png)
 
 4.  Then on the top right click on install editor
 
-![Screenshot 2026-03-12 182954.png](attachment:b58dbede-7e0e-4059-a560-3276437da56d:Screenshot_2026-03-12_182954.png)
+![images](images/b58dbede-7e0e-4059-a560-3276437da56d:Screenshot_2026-03-12_182954.png)
 
 5.  Then When you click on install editor the below window will open up , keep in mind to install only from the "official release" tab as those work best.
 
-![Screenshot 2026-03-12 183137.png](attachment:48c7e979-2231-4da5-bb24-9c215cac8425:Screenshot_2026-03-12_183137.png)
+![images](images/48c7e979-2231-4da5-bb24-9c215cac8425:Screenshot_2026-03-12_183137.png)
