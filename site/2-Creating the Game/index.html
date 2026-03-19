@@ -808,7 +808,7 @@
   <span class="md-ellipsis">
     
   
-    Adding Obstacles
+    Add Obstacles
   
 
     
@@ -961,28 +961,20 @@
 <h1 id="2-creating-the-game">2. Creating the game<a class="headerlink" href="#2-creating-the-game" title="Permanent link">&para;</a></h1>
 <p>Now you’ll start working on the game itself. The first thing you’ll need to do is generate a game board through code.</p>
 <h2 id="21-creating-the-game-board">2.1 Creating the game board<a class="headerlink" href="#21-creating-the-game-board" title="Permanent link">&para;</a></h2>
-<ol>
-<li>The provided project should already contain a <strong>Scenes</strong> folder, but if it doesn’t, in the <strong>Project</strong> window, right-click the <strong>Assets</strong> folder and select <strong>Create</strong> &gt; <strong>Folder</strong> and name it “Scenes”.</li>
-<li>Right-click the <strong>Scenes</strong> folder and select <strong>Create</strong> &gt; <strong>Scene</strong> &gt; <strong>Scene</strong> to create a new empty scene, and name it “Main”.</li>
-<li>Double click <strong>Main</strong> scene to open it. In the <strong>Hierarchy</strong> window, select the <strong>Main</strong> <strong>Camera</strong> GameObject, then in the <strong>Inspector</strong> window, under the <strong>Camera</strong> section, ensure that the <strong>Projection</strong> property is set to <strong>Orthographic</strong> and the <strong>Size</strong> property is set to <strong>5</strong>.</li>
-</ol>
+<p><strong>1.</strong> The provided project should already contain a <strong>Scenes</strong> folder, but if it doesn’t, in the <strong>Project</strong> window, right-click the <strong>Assets</strong> folder and select <strong>Create</strong> &gt; <strong>Folder</strong> and name it “Scenes”.
+<strong>2.</strong> Right-click the <strong>Scenes</strong> folder and select <strong>Create</strong> &gt; <strong>Scene</strong> &gt; <strong>Scene</strong> to create a new empty scene, and name it “Main”.
+<strong>3.</strong> Double click <strong>Main</strong> scene to open it. In the <strong>Hierarchy</strong> window, select the <strong>Main</strong> <strong>Camera</strong> GameObject, then in the <strong>Inspector</strong> window, under the <strong>Camera</strong> section, ensure that the <strong>Projection</strong> property is set to <strong>Orthographic</strong> and the <strong>Size</strong> property is set to <strong>5</strong>.</p>
 <p><img alt="Image" src="../images/25f6895b-e1f9-4b30-b305-f1122aacf250_camera-orthograpic.png" /></p>
-<ol>
-<li>Under the <strong>Environment</strong> section of the <strong>Camera</strong> settings, ensure the <strong>Background Type</strong> property is set to <strong>Solid Color</strong> and set the <strong>Background Color</strong> property to black (<strong>000000</strong>).</li>
-</ol>
+<p><strong>4.</strong> Under the <strong>Environment</strong> section of the <strong>Camera</strong> settings, ensure the <strong>Background Type</strong> property is set to <strong>Solid Color</strong> and set the <strong>Background Color</strong> property to black (<strong>000000</strong>).</p>
 <p><img alt="Image" src="../images/de7de6a8-8858-4876-8852-ebe253c70e28_camera-background-black.png" /></p>
-<ol>
-<li>Right-click in the <strong>Hierarchy</strong> window and select <strong>2D Object</strong> &gt; <strong>Tilemap</strong> &gt; <strong>Rectangular</strong>.</li>
-<li>In the <strong>Project</strong> window, right-click the <strong>Assets</strong> folder and select <strong>Create</strong> &gt; <strong>Folder</strong> to create a new folder, then name it “Tiles”. Right-click the <strong>Tiles</strong> folder and select <strong>Create</strong> &gt; <strong>2D</strong> &gt; <strong>Tile Palette</strong> &gt; <strong>Rectangular</strong> and name the new asset “GamePalette”.</li>
-<li>
-<p>From the main menu, select <strong>Window</strong> &gt; <strong>2D</strong> &gt; <strong>Tile Palette</strong>.</p>
-<p>This opens the <strong>Tile Palette</strong> window.</p>
-</li>
-</ol>
+<p><strong>5.</strong> Right-click in the <strong>Hierarchy</strong> window and select <strong>2D Object</strong> &gt; <strong>Tilemap</strong> &gt; <strong>Rectangular</strong>.
+<strong>6.</strong> In the <strong>Project</strong> window, right-click the <strong>Assets</strong> folder and select <strong>Create</strong> &gt; <strong>Folder</strong> to create a new folder, then name it “Tiles”. Right-click the <strong>Tiles</strong> folder and select <strong>Create</strong> &gt; <strong>2D</strong> &gt; <strong>Tile Palette</strong> &gt; <strong>Rectangular</strong> and name the new asset “GamePalette”.
+<strong>7.</strong> From the main menu, select <strong>Window</strong> &gt; <strong>2D</strong> &gt; <strong>Tile Palette</strong>.</p>
+<div class="codehilite"><pre><span></span><code>This opens the **Tile Palette** window.
+</code></pre></div>
+
 <p><img alt="Image" src="../images/d0affab1-15b8-4efa-8834-1f4296a1a0b3_tile-palette-window.png" /></p>
-<ol>
-<li>In the <strong>Project</strong> window, select <strong>Assets</strong> &gt; <strong>Roguelike2D</strong> &gt; <strong>TutorialAssets</strong> &gt; <strong>Sprites</strong>. Choose whichever Sprite Sheet you want, use the foldout (triangle) to expand it, and select and drop all the ground tiles into the center of the <strong>Tile Palette</strong> window.</li>
-</ol>
+<p><strong>8.</strong> In the <strong>Project</strong> window, select <strong>Assets</strong> &gt; <strong>Roguelike2D</strong> &gt; <strong>TutorialAssets</strong> &gt; <strong>Sprites</strong>. Choose whichever Sprite Sheet you want, use the foldout (triangle) to expand it, and select and drop all the ground tiles into the center of the <strong>Tile Palette</strong> window.</p>
 <p>The Editor will ask you to select a folder where you want the new tiles to be saved; select the <strong>Tiles</strong> folder you just created.</p>
 <h2 id="22-scripting">2.2 Scripting<a class="headerlink" href="#22-scripting" title="Permanent link">&para;</a></h2>
 <p>Now that you have your ground tiles, let’s write the code that creates the board where the game will happen on each level:</p>

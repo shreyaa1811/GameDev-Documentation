@@ -5,7 +5,9 @@ Now you’ll start working on the game itself. The first thing you’ll need to 
 ## 2.1 Creating the game board
 
 **1.** The provided project should already contain a **Scenes** folder, but if it doesn’t, in the **Project** window, right-click the **Assets** folder and select **Create** > **Folder** and name it “Scenes”.
+
 **2.** Right-click the **Scenes** folder and select **Create** > **Scene** > **Scene** to create a new empty scene, and name it “Main”.
+
 **3.** Double click **Main** scene to open it. In the **Hierarchy** window, select the **Main** **Camera** GameObject, then in the **Inspector** window, under the **Camera** section, ensure that the **Projection** property is set to **Orthographic** and the **Size** property is set to **5**.
 
 ![Image](images/25f6895b-e1f9-4b30-b305-f1122aacf250_camera-orthograpic.png)
@@ -15,7 +17,9 @@ Now you’ll start working on the game itself. The first thing you’ll need to 
 ![Image](images/de7de6a8-8858-4876-8852-ebe253c70e28_camera-background-black.png)
 
 **5.** Right-click in the **Hierarchy** window and select **2D Object** > **Tilemap** > **Rectangular**.
+
 **6.** In the **Project** window, right-click the **Assets** folder and select **Create** > **Folder** to create a new folder, then name it “Tiles”. Right-click the **Tiles** folder and select **Create** > **2D** > **Tile Palette** > **Rectangular** and name the new asset “GamePalette”.
+
 **7.** From the main menu, select **Window** > **2D** > **Tile Palette**.
     
     This opens the **Tile Palette** window.
