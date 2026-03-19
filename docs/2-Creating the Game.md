@@ -4,26 +4,26 @@ Now you’ll start working on the game itself. The first thing you’ll need to 
 
 ## 2.1 Creating the game board
 
-1. The provided project should already contain a **Scenes** folder, but if it doesn’t, in the **Project** window, right-click the **Assets** folder and select **Create** > **Folder** and name it “Scenes”.
-2. Right-click the **Scenes** folder and select **Create** > **Scene** > **Scene** to create a new empty scene, and name it “Main”.
-3. Double click **Main** scene to open it. In the **Hierarchy** window, select the **Main** **Camera** GameObject, then in the **Inspector** window, under the **Camera** section, ensure that the **Projection** property is set to **Orthographic** and the **Size** property is set to **5**.
+**1.** The provided project should already contain a **Scenes** folder, but if it doesn’t, in the **Project** window, right-click the **Assets** folder and select **Create** > **Folder** and name it “Scenes”.
+**2.** Right-click the **Scenes** folder and select **Create** > **Scene** > **Scene** to create a new empty scene, and name it “Main”.
+**3.** Double click **Main** scene to open it. In the **Hierarchy** window, select the **Main** **Camera** GameObject, then in the **Inspector** window, under the **Camera** section, ensure that the **Projection** property is set to **Orthographic** and the **Size** property is set to **5**.
 
 ![Image](images/25f6895b-e1f9-4b30-b305-f1122aacf250_camera-orthograpic.png)
 
-4. Under the **Environment** section of the **Camera** settings, ensure the **Background Type** property is set to **Solid Color** and set the **Background Color** property to black (**000000**).
+**4.** Under the **Environment** section of the **Camera** settings, ensure the **Background Type** property is set to **Solid Color** and set the **Background Color** property to black (**000000**).
 
 ![Image](images/de7de6a8-8858-4876-8852-ebe253c70e28_camera-background-black.png)
 
-5. Right-click in the **Hierarchy** window and select **2D Object** > **Tilemap** > **Rectangular**.
-6. In the **Project** window, right-click the **Assets** folder and select **Create** > **Folder** to create a new folder, then name it “Tiles”. Right-click the **Tiles** folder and select **Create** > **2D** > **Tile Palette** > **Rectangular** and name the new asset “GamePalette”.
-7. From the main menu, select **Window** > **2D** > **Tile Palette**.
+**5.** Right-click in the **Hierarchy** window and select **2D Object** > **Tilemap** > **Rectangular**.
+**6.** In the **Project** window, right-click the **Assets** folder and select **Create** > **Folder** to create a new folder, then name it “Tiles”. Right-click the **Tiles** folder and select **Create** > **2D** > **Tile Palette** > **Rectangular** and name the new asset “GamePalette”.
+**7.** From the main menu, select **Window** > **2D** > **Tile Palette**.
     
     This opens the **Tile Palette** window.
     
 
 ![Image](images/d0affab1-15b8-4efa-8834-1f4296a1a0b3_tile-palette-window.png)
 
-8. In the **Project** window, select **Assets** > **Roguelike2D** > **TutorialAssets** > **Sprites**. Choose whichever Sprite Sheet you want, use the foldout (triangle) to expand it, and select and drop all the ground tiles into the center of the **Tile Palette** window.
+**8.** In the **Project** window, select **Assets** > **Roguelike2D** > **TutorialAssets** > **Sprites**. Choose whichever Sprite Sheet you want, use the foldout (triangle) to expand it, and select and drop all the ground tiles into the center of the **Tile Palette** window.
 
 The Editor will ask you to select a folder where you want the new tiles to be saved; select the **Tiles** folder you just created.
 

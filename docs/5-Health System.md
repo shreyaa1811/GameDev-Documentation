@@ -191,7 +191,7 @@ private void OnTurnHappen()
 
 Now, if you enter Play mode and move around, the food counter will decrease
 
-## 5.4 **Objects in cell and food refill**
+## 5.4 Objects in cell and food refill
 
 Collider and Rigidbody components are used to detect collisions and overlapping of objects. But in this case, because the game is turn based and happens on a grid, you don’t need to use physics.
 

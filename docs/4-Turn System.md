@@ -135,7 +135,7 @@ public class BoardManager : MonoBehaviour
 
 ```
 
-## **GameManager**
+### **GameManager**
 
 ```csharp
 public class GameManager : MonoBehaviour
