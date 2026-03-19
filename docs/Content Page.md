@@ -29,7 +29,7 @@
 5.5 Collecting Health  
 5.6 Increasing health count  
 
-### 6. [Adding Obstacles](6-Adding Obstacles.md)
+### 6. [Add Obstacles](6-Add Obstacles.md)
 6.1 Add obstacles  
 6.2 Refactoring  
 6.3 Damaging walls  
