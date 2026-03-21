@@ -796,6 +796,45 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#56-increasing-the-food-count" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.6 Increasing the food count
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.6 Increasing the food count">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#in-gamemanager" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        In GameManager
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#foodobject" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FoodObject
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1313,7 +1352,7 @@
 <span class="p">}</span>
 </code></pre></div>
 <p>Virtual methods allow you to change the behavior of a method in a subclass. In this case, <strong>CellData</strong> keeps a reference to a <strong>CellObject</strong>, but this reference can point to an object of any subclass of <strong>CellObject</strong> (in this case, <strong>FoodObject</strong>). When you call <strong>PlayerEntered</strong>, the correct overridden method will be automatically called, based on the <strong>actual</strong> type of the stored object. In this case, because <strong>ContainedObject</strong> will actually point to a <strong>FoodObject</strong>, it is its <strong>PlayerEntered</strong> method that will be called, not the empty <strong>CellObject method</strong>.</p>
-<h1 id="56-increasing-the-food-count">5.6 <strong>Increasing the food count</strong><a class="headerlink" href="#56-increasing-the-food-count" title="Permanent link">&para;</a></h1>
+<h2 id="56-increasing-the-food-count">5.6 <strong>Increasing the food count</strong><a class="headerlink" href="#56-increasing-the-food-count" title="Permanent link">&para;</a></h2>
 <p>So far, the console is only outputting when the player character collects a <strong>Food</strong> GameObject. However, you also need to actually modify the amount of food displayed on the label. This is stored in the <strong>GameManager</strong>, and you have access to it through the <strong>Singleton</strong> instance.</p>
 <ul>
 <li>Create a method in the <strong>GameManager</strong> script that changes the amount of food by a given parameter and name it something like “ChangeFood”. Don’t forget to also update the label when you do so!</li>

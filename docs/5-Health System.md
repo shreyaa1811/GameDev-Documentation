@@ -457,7 +457,7 @@ So far, the console is only outputting when the player character collects a **F
 - Add a public property on your **FoodObject** so you can define how many food points are given by the **FoodObject** when collected.
 - Call the new **GameManager** method in the **PlayerEntered** method on your **FoodObject**.
 
-### **In GameManager**
+### **GameManager**
 
 ```csharp
 void OnTurnHappen() 
